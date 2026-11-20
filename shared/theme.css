@@ -1,0 +1,29 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+:root {
+  --purple-900: #14052A;
+  --purple-800: #1E0A3C;
+  --purple-700: #2A0D52;
+  --purple-600: #3B1466;
+  --purple-500: #5B2A99;
+  --lilac: #CDB8EE;
+  --lilac-2: #A893CF;
+  --font: 'Pretendard', 'Inter', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Noto Sans CJK KR', 'Noto Color Emoji', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; cursor: pointer; }
+
+.skl-dark {
+  color: #fff;
+  background: radial-gradient(circle at 90% -10%, #5B2A99 0%, #2A0D52 40%, #14052A 100%) fixed;
+  min-height: 100vh;
+}
+
+/* 원형 아바타 */
+.skl-av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: #fff center/cover no-repeat; overflow: hidden; flex: none; }
+.skl-av b { font-weight: 400; line-height: 1; }
+
+.skl-emblem { width: 100%; display: block; }
+
+.skl-loading, .skl-error { padding: 40px 24px; text-align: center; color: var(--lilac); }

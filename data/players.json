@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "club": "SK라이커",
+    "season": 2026,
+    "event": "시즌 클로징 데이",
+    "eventEn": "SEASON CLOSING DAY",
+    "teamCount": 2,
+    "teams": [
+      {
+        "name": "산타 FC",
+        "color": "#E63946"
+      },
+      {
+        "name": "루돌프 FC",
+        "color": "#C8853F"
+      }
+    ],
+    "mobileUrl": ""
+  },
+  "players": [
+    {
+      "id": "bx7k2m",
+      "nickname": "번개",
+      "number": 9,
+      "emoji": "⚡",
+      "answers": "AAAAAA AAAAAB",
+      "moment": "첫 골 넣고 세리머니하다 넘어진 날",
+      "photo": "",
+      "gk": "yes",
+      "play": "full",
+      "team": 1,
+      "role": "PIVO"
+    },
+    {
+      "id": "dr4mq9",
+      "nickname": "다람쥐",
+      "number": 7,
+      "emoji": "🐿️",
+      "answers": "AAAAAB ABBBBB",
+      "moment": "한 경기에 왕복 달리기 50번 한 날",
+      "photo": "",
+      "gk": "no",
+      "play": "full",
+      "team": 0,
+      "role": "ALA"
+    },
+    {
+      "id": "en8vpt",
+      "nickname": "에너지",
+      "number": 8,
+      "emoji": "🔋",
+      "answers": "AAAABB AABBBB",
+      "moment": "비 오는 날 혼자 7명분 뛴 날",
+      "photo": "",
+      "gk": "ok",
+      "play": "full",
+      "team": 1,
+      "role": "ALA"
+    },
+    {
+      "id": "dj3hwa",
+      "nickname": "대장",
+      "number": 4,
+      "emoji": "🧭",
+      "answers": "ABBBBB ABBBBB",
+      "moment": "작전판 처음 들고 온 날",
+      "photo": "",
+      "gk": "ok",
+      "play": "full",
+      "team": 0,
+      "role": "FIXO"
+    },
+    {
+      "id": "cb5nre",
+      "nickname": "철벽",
+      "number": 1,
+      "emoji": "🧤",
+      "answers": "ABBBBB AAAAAB",
+      "moment": "PK 두 번 연속 막은 날",
+      "photo": "",
+      "gk": "yes",
+      "play": "full",
+      "team": 0,
+      "role": "GOLEIRO"
+    },
+    {
+      "id": "dk9tzs",
+      "nickname": "돌직구",
+      "number": 11,
+      "emoji": "🚀",
+      "answers": "AAAAAB AAAABB",
+      "moment": "골대 세 번 맞히고 네 번째에 넣은 날",
+      "photo": "",
+      "gk": "no",
+      "play": "full",
+      "team": 0,
+      "role": "PIVO"
+    },
+    {
+      "id": "ss2fyc",
+      "nickname": "쏘쏘",
+      "number": 17,
+      "emoji": "🌈",
+      "answers": "AAAABB BBBBBB",
+      "moment": "처음으로 원투 패스 성공한 날",
+      "photo": "",
+      "gk": "no",
+      "play": "full",
+      "team": 0,
+      "role": "ALA"
+    },
+    {
+      "id": "hp6wqm",
+      "nickname": "해피",
+      "number": 21,
+      "emoji": "🍀",
+      "answers": "AAAAAB AABBBB",
+      "moment": "어시스트 3개로 팀 하드캐리",
+      "photo": "",
+      "gk": "ok",
+      "play": "full",
+      "team": 1,
+      "role": "ALA"
+    },
+    {
+      "id": "sy7rkd",
+      "nickname": "시야",
+      "number": 6,
+      "emoji": "🔭",
+      "answers": "AABBBB AABBBB",
+      "moment": "롱패스 한 방으로 골 만든 날",
+      "photo": "",
+      "gk": "ok",
+      "play": "full",
+      "team": 1,
+      "role": "FIXO"
+    },
+    {
+      "id": "sh4uae",
+      "nickname": "수호",
+      "number": 23,
+      "emoji": "🛡️",
+      "answers": "AABBBB AAAABB",
+      "moment": "첫 골키퍼 데뷔전 무실점",
+      "photo": "",
+      "gk": "yes",
+      "play": "full",
+      "team": 1,
+      "role": "GOLEIRO"
+    }
+  ]
+}

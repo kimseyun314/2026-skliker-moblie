@@ -1,0 +1,52 @@
+/* 선수카드 원본 크기 630x880px. 표시 크기는 .skl-card-wrap에서 scale로 조절 */
+.skl-card-wrap { position: relative; width: calc(630px * var(--scale, .4)); height: calc(880px * var(--scale, .4)); flex: none; }
+.skl-card-wrap > .skl-card { position: absolute; left: 0; top: 0; transform: scale(var(--scale, .4)); transform-origin: top left; }
+
+.skl-card { width: 630px; height: 880px; border-radius: 22px; position: relative; overflow: hidden; font-family: var(--font); }
+
+/* 앞면 */
+.cf { background: #F7F6FA; }
+.cf-tex { position: absolute; inset: 0; background: repeating-linear-gradient(118deg, rgba(59,20,102,.045) 0 2px, transparent 2px 22px); }
+.cf-photo { position: absolute; left: -10px; bottom: 84px; width: 420px; height: 540px; }
+.cf-photo svg { width: 100%; height: 100%; }
+.cf-photo-img { position: absolute; left: 0; top: 0; bottom: 56px; width: 62%; background: 40% 20%/cover no-repeat; clip-path: polygon(0 0, 100% 0, 52% 100%, 0 100%); }
+.cf-panel { position: absolute; inset: 0; background: linear-gradient(160deg, #4A1C80 0%, #2A0D52 70%); clip-path: polygon(58% 0, 100% 0, 100% 100%, 30% 100%); }
+.cf-stripe { position: absolute; background: var(--accent); transform: skewX(-22deg); }
+.cf-stripe.s1 { left: 385px; top: -20px; width: 16px; height: 930px; }
+.cf-stripe.s2 { left: 412px; top: -20px; width: 5px; height: 930px; opacity: .7; }
+.cf-num { position: absolute; right: 38px; top: 20px; font-size: 150px; font-weight: 900; color: #fff; letter-spacing: -6px; line-height: 1; font-family: 'Inter Display', 'Inter', var(--font); }
+.cf-season { position: absolute; left: 36px; top: 36px; font-size: 15px; font-weight: 800; color: #3B1466; letter-spacing: 3px; line-height: 1.3; }
+.cf-pos { position: absolute; right: 40px; top: 205px; font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 4px; }
+.cf-name { position: absolute; right: 38px; top: 240px; max-width: 330px; font-size: 72px; font-weight: 900; color: #fff; text-align: right; line-height: 1.05; letter-spacing: -2px; word-break: keep-all; }
+.cf-alias { position: absolute; right: 40px; top: 335px; font-size: 19px; font-weight: 600; color: #E8DDF7; }
+.cf-sign { position: absolute; left: 50px; bottom: 110px; font-size: 54px; color: #fff; font-family: 'Nanum Pen Script', 'Noto Serif CJK KR', serif; font-weight: 700; transform: rotate(-9deg); opacity: .9; text-shadow: 0 2px 6px rgba(0,0,0,.35); }
+.cf-emb { position: absolute; right: 36px; bottom: 80px; width: 118px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.3)); }
+.cf-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: #1E0A3C; color: #CDB8EE; font-size: 13px; font-weight: 700; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; border-top: 5px solid var(--accent); }
+
+/* 뒷면 */
+.cb { background: radial-gradient(circle at 85% 0%, #5B2A99 0%, #2A0D52 45%, #1A0736 100%); color: #fff; padding: 40px 40px 0; }
+.cb-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.cb-k { font-size: 14px; letter-spacing: 4px; color: #B9A2E0; font-weight: 800; }
+.cb-n { font-size: 46px; font-weight: 900; margin-top: 6px; letter-spacing: -1px; }
+.cb-n span { font-size: 30px; color: #B9A2E0; font-weight: 800; }
+.cb-badge { background: var(--accent); color: #1E0A3C; font-weight: 900; font-size: 20px; padding: 10px 16px; border-radius: 10px; letter-spacing: 2px; }
+.cb-type { margin-top: 14px; font-size: 24px; font-weight: 800; color: var(--accent); }
+.cb-type em { font-style: normal; color: #fff; font-weight: 600; margin-left: 8px; font-size: 20px; }
+.cb-mid { display: flex; gap: 26px; margin-top: 26px; align-items: center; }
+.cb-map { width: 232px; flex: none; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 10px; text-align: center; }
+.cb-cap { font-size: 12px; color: #B9A2E0; margin-top: 4px; }
+.cb-bars { flex: 1; }
+.cb-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; font-size: 15px; font-weight: 700; color: #D7C8F0; }
+.cb-bar span { width: 34px; } .cb-bar .r { text-align: right; }
+.cb-track { flex: 1; height: 10px; background: rgba(255,255,255,.15); border-radius: 6px; position: relative; }
+.cb-fill { height: 100%; background: var(--accent); border-radius: 6px; }
+.cb-knob { position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid var(--accent); transform: translate(-50%, -50%); }
+.cb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.cb-chip { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); padding: 6px 12px; border-radius: 20px; font-size: 15px; font-weight: 700; }
+.cb-moment { margin-top: 28px; background: rgba(255,255,255,.07); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 20px; font-size: 21px; font-weight: 700; }
+.cb-mk { font-size: 12px; color: #B9A2E0; letter-spacing: 3px; margin-bottom: 6px; }
+.cb-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: #fff; color: #1E0A3C; display: flex; align-items: center; gap: 24px; padding: 0 40px; border-top: 6px solid var(--accent); }
+.cb-qr img { width: 150px; height: 150px; display: block; image-rendering: pixelated; }
+.cb-qt { font-size: 17px; line-height: 1.5; font-weight: 500; }
+.cb-qt b { font-size: 26px; font-weight: 900; letter-spacing: 2px; color: #3B1466; }
+.cb-team { display: table; margin-top: 10px; color: #fff; font-weight: 800; padding: 5px 14px; border-radius: 20px; font-size: 15px; }

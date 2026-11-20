@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>SK라이커 관리 · 선수 & QR</title>
+<link rel="stylesheet" href="../../shared/theme.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<header class="bar">
+  <div class="ttl"><b>SK라이커 관리</b><span>선수 · 팀 · QR</span></div>
+  <div class="status" id="status">불러오는 중…</div>
+  <nav class="links">
+        <a id="lnMobile" target="_blank">모바일 미리보기 ↗</a>
+    <a id="lnCards" target="_blank">선수카드 인쇄 ↗</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <p class="intro">여기서 수정한 내용은 <b>이 브라우저에만 자동 저장</b>돼요. 다른 사람에게 보이게 하려면 아래 <b>④ 배포</b>에서 <code>players.json</code>을 저장소에 올려주세요.
+    실명과 구력은 관리용으로만 쓰이고 배포 파일에는 들어가지 않아요.</p>
+
+  <!-- ① 행사 설정 -->
+  <section class="card">
+    <h2>① 행사 설정</h2>
+    <div class="form-grid">
+      <label>동호회 이름<input id="mClub"></label>
+      <label>시즌<input id="mSeason" type="number"></label>
+      <label>행사 이름<input id="mEvent"></label>
+      <label>행사 영문 (카드 하단)<input id="mEventEn"></label>
+      <label>팀 수<select id="mTeamCount"><option>2</option><option>3</option><option>4</option></select></label>
+    </div>
+    <div id="teamEdit" class="teams"></div>
+    <label class="full">QR에 들어갈 모바일 주소
+      <div class="row"><input id="mMobileUrl" placeholder="https://아이디.github.io/저장소/"><button class="ghost" id="fillUrl">현재 사이트 기준으로 채우기</button></div>
+      <small id="urlHint"></small>
+    </label>
+  </section>
+
+  <!-- ② 선수 -->
+  <section class="card">
+    <div class="h2row"><h2>② 선수 <span id="pCount"></span></h2>
+      <div class="btns">
+        <button class="ghost" id="btnImport">구글폼 응답 붙여넣기</button>
+        <button class="ghost" id="btnAssign">팀 자동 배정</button>
+        <button class="primary" id="btnAdd">+ 선수 추가</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th></th><th>닉네임 (실명)</th><th>#</th><th>유형</th><th>과감/해결</th><th>팀</th><th>오늘 포지션</th><th>참여</th><th>QR ID</th><th></th></tr></thead>
+      <tbody id="pBody"></tbody>
+    </table></div>
+    <p class="help">팀 자동 배정은 유형 적합도, 골키퍼 의향, 구력을 반영해 팀마다 골레이로·픽소·아라·피보가 고르게 들어가도록 나눠요. 배정 후 표에서 직접 바꿀 수도 있어요.</p>
+  </section>
+
+  <!-- ③ QR -->
+  <section class="card">
+    <div class="h2row"><h2>③ 선수별 QR 코드</h2>
+      <div class="btns"><button class="ghost" id="qrAll">QR 이미지 전부 다운로드</button></div></div>
+    <p class="help">QR에는 <code>모바일 주소?p=QR ID</code>가 들어가요. QR ID는 선수를 추가할 때 한 번 만들어지고 바뀌지 않아서, 정보를 수정해도 이미 인쇄한 QR은 그대로 쓸 수 있어요. 선수를 삭제하면 그 QR은 더 이상 열리지 않아요.</p>
+    <div class="qrgrid" id="qrGrid"></div>
+  </section>
+
+  <!-- ④ 배포 -->
+  <section class="card">
+    <h2>④ 배포 & 백업</h2>
+    <div class="deploy">
+      <div class="dp">
+        <h3>방법 A. 파일로 올리기</h3>
+        <p>배포용 파일을 받아서 GitHub 저장소의 <code>data/players.json</code>에 덮어써요.</p>
+        <button class="primary" id="dlPublic">배포용 players.json 다운로드</button>
+      </div>
+      <div class="dp">
+        <h3>방법 B. GitHub에 바로 저장</h3>
+        <p>개인 토큰으로 이 화면에서 바로 커밋해요. 1~2분 뒤 사이트에 반영돼요.</p>
+        <div class="form-grid tight">
+          <label>계정 (owner)<input id="ghOwner" placeholder="my-id"></label>
+          <label>저장소 (repo)<input id="ghRepo" placeholder="sk-liker-2026"></label>
+          <label>브랜치<input id="ghBranch" placeholder="main"></label>
+          <label>파일 경로<input id="ghPath" placeholder="data/players.json"></label>
+        </div>
+        <label class="full">토큰 (Fine-grained, 이 저장소의 Contents 읽기/쓰기만)<input id="ghToken" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+        <label class="chk"><input type="checkbox" id="ghRemember"> 이 브라우저에 토큰 기억하기 (공용 PC에서는 끄세요)</label>
+        <button class="primary" id="ghSave">GitHub에 저장</button>
+        <div class="ghmsg" id="ghMsg"></div>
+      </div>
+      <div class="dp">
+        <h3>관리용 백업</h3>
+        <p>실명·구력까지 포함된 전체 데이터예요. <b>저장소에 올리지 말고</b> 개인적으로 보관하세요.</p>
+        <button class="ghost" id="dlBackup">백업 파일 내보내기</button>
+        <button class="ghost" id="ulBackup">백업 불러오기</button>
+        <button class="ghost danger" id="loadPublic">사이트의 players.json으로 다시 시작</button>
+        <input type="file" id="backupFile" accept="application/json" hidden>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 선수 편집 -->
+<div class="modal" id="editModal"><form class="mbox" id="editForm" autocomplete="off">
+  <div class="mhead"><h2 id="editTitle">선수 추가</h2><div class="preview" id="typePreview"></div></div>
+  <div class="form-grid">
+    <label>실명 (비공개)<input name="name"></label>
+    <label>닉네임 *<input name="nickname" required maxlength="10"></label>
+    <label>등번호<input name="number" type="number" min="0" max="99"></label>
+    <label>이모지<input name="emoji" maxlength="4" placeholder="⚡"></label>
+  </div>
+  <label class="full">올해 풋살 최고의 순간<input name="moment" maxlength="40"></label>
+  <div class="photo-row">
+    <div class="ph" id="phPrev"></div>
+    <div><label class="file">사진 선택<input type="file" id="phFile" accept="image/*" hidden></label>
+      <button type="button" class="ghost sm" id="phClear">사진 지우기</button>
+      <small>사진 선택: 자동으로 작게 줄여서 데이터 안에 저장돼요.</small>
+      <input id="phPath" placeholder="또는 저장소 사진 경로 (예: photos/bx7k2m.jpg)" style="width:320px"></div>
+  </div>
+  <h3>성향 검사 (설문 Q7~Q18)</h3>
+  <div class="qs" id="qs"></div>
+  <div class="form-grid">
+    <label>골키퍼 의향<select name="gk"><option value="yes">좋아요</option><option value="ok">잠깐은 괜찮아요</option><option value="no">피하고 싶어요</option></select></label>
+    <label>당일 참여<select name="play"><option value="full">풀타임</option><option value="half">절반</option><option value="cheer">응원·진행</option></select></label>
+    <label>구력 (비공개)<select name="exp"><option value="0">1년 미만</option><option value="1">1~2년</option><option value="2">2년 이상</option></select></label>
+  </div>
+  <div class="mfoot"><button type="button" class="ghost" id="editCancel">취소</button><button type="submit" class="primary">저장</button></div>
+</form></div>
+
+<!-- 구글폼 붙여넣기 -->
+<div class="modal" id="importModal"><div class="mbox">
+  <div class="mhead"><h2>구글폼 응답 붙여넣기</h2></div>
+  <p class="help">구글폼 응답 시트에서 <b>제목 행을 포함해</b> 전체를 복사(Ctrl+C)해서 붙여넣거나, CSV로 내려받은 내용을 붙여넣으세요.
+    질문 제목으로 열을 찾기 때문에 설문지 문항 문구를 그대로 쓰면 돼요. 같은 닉네임이 이미 있으면 그 선수 정보를 업데이트해요 (QR 유지).</p>
+  <textarea id="importText" rows="10" placeholder="타임스탬프	이름	선수카드에 표시할 닉네임	희망 등번호	…"></textarea>
+  <div class="ghmsg" id="importMsg"></div>
+  <div class="mfoot"><button class="ghost" id="importCancel">닫기</button><button class="primary" id="importRun">가져오기</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../../shared/config.js"></script>
+<script src="../../vendor/qrcode.js"></script>
+<script src="../../shared/logic.js"></script>
+<script src="../../shared/store.js"></script>
+<script src="../../shared/qr.js"></script>
+<script src="../../shared/card.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "club": "SK라이커",
+    "season": 2026,
+    "event": "시즌 클로징 데이",
+    "eventEn": "SEASON CLOSING DAY",
+    "teamCount": 2,
+    "teams": [
+      {
+        "name": "산타 FC",
+        "color": "#E63946"
+      },
+      {
+        "name": "루돌프 FC",
+        "color": "#C8853F"
+      }
+    ],
+    "mobileUrl": ""
+  },
+  "players": [
+    {
+      "id": "ab12cd",
+      "nickname": "닉네임",
+      "number": 10,
+      "emoji": "⚽",
+      "answers": "ABABAB BABABA",
+      "moment": "올해 최고의 순간 한 줄",
+      "photo": "photos/ab12cd.jpg",
+      "gk": "ok",
+      "play": "full",
+      "team": "산타 FC",
+      "role": "ALA"
+    }
+  ]
+}

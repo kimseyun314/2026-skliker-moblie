@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SK라이커 선수카드 인쇄</title>
+<link rel="stylesheet" href="../../shared/theme.css">
+<link rel="stylesheet" href="../../shared/card.css">
+<link rel="stylesheet" href="cards.css">
+</head>
+<body>
+<div class="toolbar no-print">
+  <div><b>선수카드 인쇄</b> <span id="info"></span></div>
+  <div class="opts">
+    <label><input type="radio" name="side" value="both" checked> 앞·뒤 모두</label>
+    <label><input type="radio" name="side" value="front"> 앞면만</label>
+    <label><input type="radio" name="side" value="back"> 뒷면만</label>
+    <button id="print">🖨 인쇄 / PDF 저장</button>
+  </div>
+  <p class="tip">카드 크기 63×88mm (트레이딩카드 규격), A4 한 장에 9장. 인쇄 설정에서 <b>배율 100%</b>, <b>여백 없음</b>, <b>배경 그래픽 켜기</b>를 선택하세요.
+    양면 인쇄는 <b>긴 쪽으로 넘기기</b>로 하면 앞뒤가 맞도록 뒷면 순서를 좌우로 뒤집어 두었어요.</p>
+</div>
+<div id="pages"><div class="skl-loading">불러오는 중…</div></div>
+
+<script src="../../shared/config.js"></script>
+<script src="../../vendor/qrcode.js"></script>
+<script src="../../shared/logic.js"></script>
+<script src="../../shared/store.js"></script>
+<script src="../../shared/qr.js"></script>
+<script src="../../shared/card.js"></script>
+<script src="cards.js"></script>
+</body>
+</html>

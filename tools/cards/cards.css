@@ -1,0 +1,25 @@
+@page { size: A4; margin: 0; }
+body { background: #E9E4F0; }
+.toolbar { position: sticky; top: 0; z-index: 3; background: #2A0D52; color: #fff; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.toolbar span { color: #CDB8EE; font-size: 13px; margin-left: 8px; }
+.opts { display: flex; gap: 14px; align-items: center; font-size: 13.5px; }
+.opts label { display: flex; gap: 4px; align-items: center; }
+.opts button { border: 0; background: #fff; color: #2A0D52; font-weight: 800; padding: 9px 16px; border-radius: 10px; }
+.tip { width: 100%; font-size: 12.5px; color: #CDB8EE; line-height: 1.5; }
+
+#pages { padding: 24px 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.page { width: 210mm; height: 297mm; background: #fff; display: grid; grid-template-columns: repeat(3, 63mm); grid-auto-rows: 88mm; gap: 3mm;
+  justify-content: center; align-content: center; box-shadow: 0 6px 20px rgba(0,0,0,.15); position: relative; overflow: hidden; }
+.page .label { position: absolute; top: 5mm; left: 0; right: 0; text-align: center; font-size: 9pt; color: #A893CF; }
+.slot { width: 63mm; height: 88mm; outline: .2mm dashed #D0C6DD; position: relative; }
+.slot .skl-card-wrap { --scale: .377952; }
+.slot .skl-card { border-radius: 22px; }
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  #pages { padding: 0; gap: 0; }
+  .page { box-shadow: none; break-after: page; }
+  .page .label { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
