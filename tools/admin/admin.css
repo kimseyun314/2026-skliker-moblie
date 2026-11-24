@@ -76,7 +76,7 @@ small.warn { color: #C1121F; }
 .photo-row > div:last-child { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .ph { width: 74px; height: 74px; border-radius: 50%; background: #F1EBF7 center/cover; display: flex; align-items: center; justify-content: center; font-size: 30px; flex: none; }
 .qs { display: grid; gap: 6px; }
-.q { display: grid; grid-template-columns: 34px 1fr 1fr; gap: 6px; align-items: stretch; }
+.q { display: grid; grid-template-columns: 34px repeat(4, 1fr); gap: 6px; align-items: stretch; }
 .q .n { font-size: 11.5px; font-weight: 800; color: #8A7BA6; display: flex; align-items: center; }
 .q .t { grid-column: 2 / -1; font-size: 13px; font-weight: 700; color: #2A0D52; margin-top: 4px; }
 .q label.opt { flex-direction: row; align-items: center; gap: 6px; border: 1px solid #E2D8EE; border-radius: 9px; padding: 7px 10px; font-weight: 500; color: #3D2E58; cursor: pointer; font-size: 12.5px; }

@@ -3,7 +3,7 @@
   'use strict';
 
   /** text → <canvas> (size: 한 변 픽셀) */
-  function canvas(text, size = 360, fg = '#1E0A3C', bg = '#FFFFFF') {
+  function canvas(text, size = 360, fg = '#111111', bg = '#FFFFFF') {
     const qr = qrcode(0, 'M');
     qr.addData(text);
     qr.make();

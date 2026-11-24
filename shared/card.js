@@ -1,130 +1,167 @@
-/* 선수카드 · 포지션 맵 · 아바타 렌더링 (HTML 문자열 반환) */
+/* 선수카드 · 포지션 맵 · 아바타 렌더링 (HTML 문자열 반환)
+ * 카드 디자인은 Design 시안 "SK라이커 선수 카드 시안"(검정 + 라임, Anton/Oswald)을 따라요. */
 (function () {
   'use strict';
   const T = () => SKL.TYPES;
+  const LIME = '#E4F218';
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  function emblem(meta) {
-    const club = esc((meta && meta.club) || 'SK라이커');
-    const season = esc((meta && meta.season) || '2026');
-    return `<svg viewBox="0 0 100 118" xmlns="http://www.w3.org/2000/svg" class="skl-emblem">
-<path d="M50 3 L95 15 L95 58 C95 88 72 106 50 115 C28 106 5 88 5 58 L5 15 Z" fill="#fff" stroke="#3B1466" stroke-width="5"/>
-<path d="M50 12 L86 22 L86 57 C86 81 68 96 50 104 C32 96 14 81 14 57 L14 22 Z" fill="#3B1466"/>
-<text x="50" y="40" text-anchor="middle" font-size="14.5" font-weight="900" fill="#fff" letter-spacing="-0.5">${club}</text>
-<circle cx="50" cy="66" r="16" fill="#fff"/><path d="M50 56 l7 5 -3 8 h-8 l-3 -8 z" fill="#3B1466"/>
-<text x="50" y="96" text-anchor="middle" font-size="9" font-weight="700" fill="#C9A7F5" letter-spacing="1">${season}</text></svg>`;
+  /** 원형 엠블럼 (카드 오른쪽 위와 같은 모양) */
+  function emblem() {
+    return `<div class="skl-emblem"><b>FC LIKER</b><i>SL</i><small>FUTSAL CLUB</small></div>`;
   }
 
   const SILHOUETTE = `<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-<defs><linearGradient id="sklsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9C3D3"/><stop offset="1" stop-color="#9D93AE"/></linearGradient></defs>
-<circle cx="150" cy="110" r="62" fill="url(#sklsg)"/><path d="M20 380 C 25 255, 85 200, 150 200 C 215 200, 275 255, 280 380 Z" fill="url(#sklsg)"/></svg>`;
+<circle cx="150" cy="118" r="62" fill="#C9CCD2"/><path d="M20 380 C 25 262, 85 208, 150 208 C 215 208, 275 262, 280 380 Z" fill="#C9CCD2"/></svg>`;
 
-  /** 원형 아바타 (사진 있으면 사진, 없으면 이모지) */
+  /** 원형 아바타: 사진이 있으면 사진, 없으면 등번호 */
   function avatar(p, cls = '') {
     if (p.photo) return `<span class="skl-av ${cls}" style="background-image:url('${p.photo}')"></span>`;
-    return `<span class="skl-av ${cls}"><b>${esc(p.emoji || '⚽')}</b></span>`;
+    return `<span class="skl-av ${cls}"><b>${esc(p.number === '' || p.number == null ? (p.nickname || '?').slice(0, 1) : p.number)}</b></span>`;
   }
+
+  /** 디스플레이 서체(Anton)에는 한글이 없어서, 한글 부분만 굵은 고딕으로 감싸요 */
+  const disp = (s) => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:\s+[\u3131-\u318E\uAC00-\uD7A3]+)*)/g, '<span class="ko">$1</span>');
+  const bigName = (p) => disp(p.nameEn || p.nickname);
+  const subName = (p) => (p.nameEn ? esc(p.nickname) : '');
+  const season = (meta) => esc((meta && meta.season) || 2026);
 
   function cardFront(p, meta) {
     const t = T()[p.type];
     const photo = p.photo
-      ? `<div class="cf-photo-img" style="background-image:url('${p.photo}')"></div>`
-      : `<div class="cf-photo">${SILHOUETTE}</div>`;
-    return `<div class="skl-card cf" style="--accent:${t.color}">
-  <div class="cf-tex"></div>${photo}<div class="cf-panel"></div>
-  <div class="cf-stripe s1"></div><div class="cf-stripe s2"></div>
-  <div class="cf-num">${esc(p.number)}</div>
-  <div class="cf-season">SEASON<br>${esc((meta && meta.season) || 2026)}</div>
-  <div class="cf-pos">${p.type}</div>
-  <div class="cf-name">${esc(p.nickname)}</div>
-  <div class="cf-alias">${t.ko} · ${t.alias}</div>
-  <div class="cf-sign">${esc(p.nickname)}</div>
-  <div class="cf-emb">${emblem(meta)}</div>
-  <div class="cf-foot">${esc((meta && meta.club) || 'SK라이커')} · WOMEN'S FUTSAL CLUB · ${esc((meta && meta.eventEn) || 'SEASON CLOSING DAY')}</div>
+      ? `<img class="cf-img" src="${p.photo}" alt="">`
+      : `<div class="cf-sil">${SILHOUETTE}</div>`;
+    return `<div class="skl-card cf">
+  <div class="cf-in">
+    <div class="cf-lime"></div>
+    <div class="cf-top chrome">${photo}
+      <div class="cf-circ cf-type"><small>TYPE</small><b>${t.ko}</b></div>
+      <div class="cf-circ cf-emb">${emblem()}</div>
+    </div>
+    <div class="cf-numwrap">
+      <div class="cf-num"><span class="sh" aria-hidden="true">${esc(p.number)}</span><span class="fg">${esc(p.number)}</span></div>
+      <div class="cf-pos"><b>${p.type}</b><i></i><span>${esc(p.subtype)}</span></div>
+    </div>
+    <div class="cf-bottom">
+      <div class="cf-name">${bigName(p)}</div>
+      ${subName(p) ? `<div class="cf-nick">${subName(p)}</div>` : ''}
+      <div class="cf-foot"><span>SK LIKER FUTSAL CLUB · ${season(meta)} SEASON CLOSING</span><b>NO. ${esc(p.number)}</b></div>
+    </div>
+  </div>
 </div>`;
   }
 
-  function bar(left, right, v) {
-    const w = Math.round((v / 6) * 100);
-    return `<div class="cb-bar"><span>${left}</span><div class="cb-track"><div class="cb-fill" style="width:${w}%"></div><div class="cb-knob" style="left:${w}%"></div></div><span class="r">${right}</span></div>`;
+  function radar(p) {
+    const k = (v) => v / 100;
+    const r = [p.aff.PIVO, p.aff.ALA, p.aff.FIXO, p.aff.GOLEIRO];
+    const pts = [`130,${113 - 89 * k(r[0])}`, `${130 + 70 * k(r[1])},113`, `130,${113 + 89 * k(r[2])}`, `${130 - 70 * k(r[3])},113`].join(' ');
+    return `<svg viewBox="0 0 260 226" class="cb-radar" role="img" aria-label="능력치 돌파력 ${r[0]}, 활동력 ${r[1]}, 조율력 ${r[2]}, 수호력 ${r[3]}">
+<polygon points="130,24 200,113 130,202 60,113" fill="none" stroke="#3A3A3A"/>
+<polygon points="130,46 182.5,113 130,180 77.5,113" fill="none" stroke="#2E2E2E"/>
+<polygon points="130,68.5 165,113 130,157.5 95,113" fill="none" stroke="#2E2E2E"/>
+<line x1="130" y1="24" x2="130" y2="202" stroke="#2E2E2E"/><line x1="60" y1="113" x2="200" y2="113" stroke="#2E2E2E"/>
+<polygon points="${pts}" fill="rgba(228,242,24,.28)" stroke="${LIME}" stroke-width="2.5"/>
+<text x="130" y="15" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">돌파력 ${r[0]}</text>
+<text x="258" y="105" fill="#fff" font-size="16" font-weight="700" text-anchor="end">활동력</text>
+<text x="258" y="129" fill="#fff" font-size="19" text-anchor="end" font-family="Anton, sans-serif">${r[1]}</text>
+<text x="130" y="223" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">조율력 ${r[2]}</text>
+<text x="2" y="105" fill="#fff" font-size="16" font-weight="700">수호력</text>
+<text x="2" y="129" fill="#fff" font-size="19" font-family="Anton, sans-serif">${r[3]}</text></svg>`;
+  }
+
+  /** 카드 뒷면 03 POSITION 박스 (기준선 + 내 사분면 강조) */
+  function miniPos(p, meta) {
+    const { mx, my } = SKL.medians(meta);
+    const px = (v) => 4 + (v / 18) * 92, py = (v) => 4 + ((18 - v) / 18) * 92;
+    const qx = px(mx), qy = py(my);
+    const quad = { PIVO: `left:${qx}%;right:0;top:0;height:${qy}%`, GOLEIRO: `left:0;width:${qx}%;top:0;height:${qy}%`, ALA: `left:${qx}%;right:0;top:${qy}%;bottom:0`, FIXO: `left:0;width:${qx}%;top:${qy}%;bottom:0` }[p.type];
+    const lab = (k, pos) => `<div class="mp-l" style="${pos};color:${p.type === k ? LIME : '#6E6E6E'}">${k}</div>`;
+    return `<div class="mp"><div class="mp-q" style="${quad}"></div>
+<div class="mp-v" style="left:${qx}%"></div><div class="mp-h" style="top:${qy}%"></div>
+${lab('GOLEIRO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('FIXO', 'bottom:7px;left:9px')}${lab('ALA', 'bottom:7px;right:9px')}
+<div class="mp-dot" style="left:${px(p.x)}%;top:${py(p.y)}%"></div></div>`;
   }
 
   function cardBack(p, meta, teams, players, qrSrc) {
     const t = T()[p.type];
-    const team = teams[p.team] || null;
-    const chips = t.kw.map((k) => `<span class="cb-chip">#${k}</span>`).join('');
-    return `<div class="skl-card cb" style="--accent:${t.color}">
-  <div class="cb-head"><div><div class="cb-k">PLAYER PROFILE</div><div class="cb-n">${esc(p.emoji || '')} ${esc(p.nickname)} <span>#${esc(p.number)}</span></div></div><div class="cb-badge">${p.type}</div></div>
-  <div class="cb-type">${t.ko} <em>${t.alias}</em></div>
-  <div class="cb-mid">
-    <div class="cb-map">${mapSVG(players, { me: p, size: 210, small: true })}<div class="cb-cap">${esc((meta && meta.season) || 2026)} 포지션 맵 속 나의 위치</div></div>
-    <div class="cb-bars">${bar('신중', '과감', p.x)}${bar('연결', '해결', p.y)}<div class="cb-chips">${chips}</div></div>
-  </div>
-  <div class="cb-moment"><div class="cb-mk">${esc((meta && meta.season) || 2026)} BEST MOMENT</div>“${esc(p.moment || '')}”</div>
-  <div class="cb-foot">
-    <div class="cb-qr">${qrSrc ? `<img src="${qrSrc}" alt="QR">` : ''}</div>
-    <div class="cb-qt"><b>SCAN ME</b><br>QR을 찍으면 전체 포지션 맵에서<br>내 위치와 우리 팀을 볼 수 있어요
-      ${team ? `<div class="cb-team" style="background:${team.color}">${esc(team.name)}</div>` : ''}</div>
+    return `<div class="skl-card cb">
+  <div class="cb-in">
+    <div class="cb-head"><div class="cb-no">${esc(p.number)}</div><div class="cb-name">${bigName(p)}</div><div class="cb-club">SK LIKER FUTSAL CLUB<br>${season(meta)} SEASON CLOSING</div></div>
+    <div class="cb-body">
+      <div class="cb-box">
+        <div class="cb-k">01  TYPE</div>
+        <div class="cb-type"><span class="cb-badge">${p.type}</span><b>${esc(p.subtype)}</b></div>
+        <div class="cb-line">“${t.line}”</div>
+        <div class="cb-persona">${t.persona}</div>
+        <div class="cb-tags">${p.tags.map((g) => `<span>${esc(g)}</span>`).join('')}</div>
+      </div>
+      <div class="cb-grid">
+        <div class="cb-box"><div class="cb-k">02  ABILITY</div>${radar(p)}</div>
+        <div class="cb-box cb-pos"><div class="cb-k">03  POSITION</div>${miniPos(p, meta)}
+          <div class="cb-xy"><div><span>과감 →</span><b>${p.x}</b><small>/18</small></div><div><span>해결 ↑</span><b>${p.y}</b><small>/18</small></div></div></div>
+      </div>
+      <div class="cb-box cb-hl">
+        <div><div class="cb-k">04  ${season(meta)} HIGHLIGHT</div><div class="cb-moment">${esc(p.moment || '')}</div></div>
+        ${qrSrc ? `<img class="cb-qr" src="${qrSrc}" alt="QR">` : ''}
+      </div>
+    </div>
   </div>
 </div>`;
   }
 
   /**
-   * 4분면 포지션 맵 SVG
-   * opts: { me, size, small, mode:'type'|'team', teams, labels }
+   * 포지션 맵 SVG (모바일용). 가로 = 과감, 세로 = 해결 (0~18), 점선 = 기준선
+   * opts: { me, size, mode:'type'|'team', teams, meta }
    */
   function mapSVG(players, opts = {}) {
     const size = opts.size || 340;
-    const small = !!opts.small;
-    const pad = small ? 14 : 16;
-    const s = size - pad * 2;
-    const pos = (x, y) => [pad + (0.12 + (x / 6) * 0.76) * s, pad + (0.12 + ((6 - y) / 6) * 0.76) * s];
-    const quads = [['GOLEIRO', 0, 0], ['PIVO', 1, 0], ['FIXO', 0, 1], ['ALA', 1, 1]];
-    const g = [`<svg viewBox="0 0 ${size} ${size}" width="100%" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block">`];
-    for (const [t, qx, qy] of quads) {
-      const col = T()[t].color;
-      const gap = small ? 0 : 3;
-      g.push(`<rect x="${pad + (qx * s) / 2 + gap}" y="${pad + (qy * s) / 2 + gap}" width="${s / 2 - gap * 2}" height="${s / 2 - gap * 2}" rx="${small ? 0 : 14}" fill="${col}" opacity="${small ? 0.18 : 0.13}"/>`);
-      const tx = pad + (qx * s) / 2 + (qx === 0 ? (small ? 6 : 12) : s / 2 - (small ? 6 : 12));
-      const ty = pad + (qy * s) / 2 + (qy === 0 ? (small ? 14 : 22) : s / 2 - (small ? 6 : 12));
-      g.push(`<text x="${tx}" y="${ty}" text-anchor="${qx === 0 ? 'start' : 'end'}" font-size="${small ? 10 : 12.5}" font-weight="900" fill="${col}" letter-spacing="1">${t}</text>`);
+    const pad = 14, s = size - pad * 2;
+    const { mx, my } = SKL.medians(opts.meta);
+    const X = (v) => pad + (0.06 + (v / 18) * 0.88) * s;
+    const Y = (v) => pad + (0.06 + ((18 - v) / 18) * 0.88) * s;
+    const g = [`<svg viewBox="0 0 ${size} ${size}" width="100%" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block;font-family:'Noto Sans KR',sans-serif">`];
+    g.push(`<rect x="${pad}" y="${pad}" width="${s}" height="${s}" fill="#141414" stroke="#2E2E2E"/>`);
+    for (let i = 1; i < 6; i++) {
+      const v = pad + (s * i) / 6;
+      g.push(`<line x1="${v}" y1="${pad}" x2="${v}" y2="${pad + s}" stroke="#1F1F1F"/><line x1="${pad}" y1="${v}" x2="${pad + s}" y2="${v}" stroke="#1F1F1F"/>`);
     }
-    if (small) {
-      g.push(`<line x1="${pad + s / 2}" y1="${pad}" x2="${pad + s / 2}" y2="${pad + s}" stroke="#fff" stroke-opacity=".35"/>`);
-      g.push(`<line x1="${pad}" y1="${pad + s / 2}" x2="${pad + s}" y2="${pad + s / 2}" stroke="#fff" stroke-opacity=".35"/>`);
-    }
-    // 같은 좌표 겹침 방지: 살짝 퍼뜨리기
-    const seen = {};
     const me = opts.me;
+    const qx = X(mx), qy = Y(my);
+    if (me && opts.mode !== 'team') {
+      const r = { PIVO: [qx, pad, pad + s - qx, qy - pad], GOLEIRO: [pad, pad, qx - pad, qy - pad], ALA: [qx, qy, pad + s - qx, pad + s - qy], FIXO: [pad, qy, qx - pad, pad + s - qy] }[me.type];
+      g.push(`<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" fill="${LIME}" opacity=".08"/>`);
+    }
+    g.push(`<line x1="${qx}" y1="${pad}" x2="${qx}" y2="${pad + s}" stroke="#6E6E6E" stroke-dasharray="4 4"/>`);
+    g.push(`<line x1="${pad}" y1="${qy}" x2="${pad + s}" y2="${qy}" stroke="#6E6E6E" stroke-dasharray="4 4"/>`);
+    const lab = (k, x, y, anchor) => g.push(`<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Oswald, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="${opts.mode === 'team' ? '#6E6E6E' : T()[k].color}" opacity="${me && me.type !== k && opts.mode !== 'team' ? 0.55 : 1}">${k}</text>`);
+    lab('GOLEIRO', pad + 8, pad + 18, 'start'); lab('PIVO', pad + s - 8, pad + 18, 'end');
+    lab('FIXO', pad + 8, pad + s - 8, 'start'); lab('ALA', pad + s - 8, pad + s - 8, 'end');
+
+    const seen = {};
     const ordered = players.filter((p) => !me || p.id !== me.id).concat(me ? [players.find((p) => p.id === me.id) || me] : []);
     for (const p of ordered) {
       const key = p.x + ',' + p.y;
       const k = seen[key] = (seen[key] || 0) + 1;
-      let [cx, cy] = pos(p.x, p.y);
-      if (k > 1) { const a = k * 2.1; cx += Math.cos(a) * (small ? 7 : 16); cy += Math.sin(a) * (small ? 7 : 16); }
+      let cx = X(p.x), cy = Y(p.y);
+      if (k > 1) { const a = k * 2.1; cx += Math.cos(a) * 15; cy += Math.sin(a) * 15; }
       const col = opts.mode === 'team' && opts.teams && opts.teams[p.team] ? opts.teams[p.team].color : T()[p.type].color;
       const isMe = me && p.id === me.id;
-      if (small) {
-        if (isMe) g.push(`<circle cx="${cx}" cy="${cy}" r="12" fill="${col}" opacity=".35"/><circle cx="${cx}" cy="${cy}" r="6.5" fill="${col}" stroke="#fff" stroke-width="2"/>`);
-        else g.push(`<circle cx="${cx}" cy="${cy}" r="4" fill="#fff" opacity=".5"/>`);
-        continue;
-      }
       if (isMe) {
-        g.push(`<circle cx="${cx}" cy="${cy}" r="30" fill="${col}" opacity=".18"><animate attributeName="r" values="22;32;22" dur="2s" repeatCount="indefinite"/></circle>`);
-        g.push(`<circle cx="${cx}" cy="${cy}" r="15" fill="${col}" stroke="#fff" stroke-width="3"/>`);
-        g.push(`<text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="14">${esc(p.emoji || '')}</text>`);
-        g.push(`<g transform="translate(${cx - 38},${cy - 50})"><rect width="76" height="22" rx="11" fill="#fff"/><text x="38" y="15.5" text-anchor="middle" font-size="12" font-weight="900" fill="#3B1466">나 · ${esc(p.nickname)}</text></g>`);
+        g.push(`<circle cx="${cx}" cy="${cy}" r="26" fill="${LIME}" opacity=".18"><animate attributeName="r" values="18;30;18" dur="2s" repeatCount="indefinite"/></circle>`);
+        g.push(`<circle cx="${cx}" cy="${cy}" r="11" fill="${LIME}" stroke="#111" stroke-width="3"/>`);
+        const w = 22 + String(p.nickname).length * 13;
+        g.push(`<g transform="translate(${Math.max(pad, Math.min(pad + s - w, cx - w / 2))},${cy - 44})"><rect width="${w}" height="22" fill="${LIME}"/><text x="${w / 2}" y="15.5" text-anchor="middle" font-size="12" font-weight="900" fill="#111">나 · ${esc(p.nickname)}</text></g>`);
       } else {
-        g.push(`<circle cx="${cx}" cy="${cy}" r="11" fill="${col}" stroke="#1A0736" stroke-width="2"/>`);
-        g.push(`<text x="${cx}" y="${cy + 24}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${esc(p.nickname)}</text>`);
+        g.push(`<circle cx="${cx}" cy="${cy}" r="8" fill="${col}" stroke="#111" stroke-width="2"/>`);
+        g.push(`<text x="${cx}" y="${cy + 21}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#BDBDBD">${esc(p.nickname)}</text>`);
       }
     }
     g.push('</svg>');
     return g.join('');
   }
 
-  window.SKLView = { esc, emblem, avatar, cardFront, cardBack, mapSVG };
+  window.SKLView = { esc, disp, emblem, avatar, cardFront, cardBack, mapSVG, LIME };
 })();

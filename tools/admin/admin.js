@@ -9,11 +9,21 @@
   /* ---------- 상태 불러오기 ---------- */
   let state = SKLStore.readLocal();
   if (!state) {
-    try { state = await SKLStore.fetchPublic(); toast('사이트의 players.json으로 시작했어요'); }
+    try { state = await SKLStore.fetchPublic(); toast('사이트의 players.csv로 시작했어요'); }
     catch (e) { state = { meta: {}, players: [] }; }
   }
   state.meta = Object.assign({ club: 'SK라이커', season: 2026, event: '시즌 클로징 데이', eventEn: 'SEASON CLOSING DAY', teamCount: 2, teams: [], mobileUrl: '' }, state.meta || {});
   state.players = state.players || [];
+  state.pending = state.pending || [];
+  /** 새 선수 ID: players.csv에 미리 만들어둔 빈 ID(이미 인쇄한 QR)부터 순서대로 써요 */
+  function nextId() {
+    while (state.pending.length) {
+      const id = state.pending.shift();
+      if (!state.players.some((q) => q.id === id)) return id;
+    }
+    let id; do { id = SKL.newId(); } while (state.players.some((q) => q.id === id));
+    return id;
+  }
 
   const defaultMobileUrl = () => (window.SKL_CONFIG && SKL_CONFIG.siteUrl) || new URL('../../', location.href).href;
   const mobileUrl = () => state.meta.mobileUrl || defaultMobileUrl();
@@ -92,7 +102,7 @@
       renderQR(); return;
     }
     $('#pBody').innerHTML = state.players.map((raw) => {
-      const p = SKL.enrich(Object.assign({}, raw, { photo: SKLStore.resolvePhoto(raw.photo) }));
+      const p = SKL.enrich(Object.assign({}, raw, { photo: SKLStore.resolvePhoto(raw.photo) }), SKL.medians(state.meta));
       const c = TYPES[p.type].color;
       const teamSel = `<select data-id="${p.id}" data-k="team"><option value="">미배정</option>${teams.map((t, i) => `<option value="${i}" ${raw.team === i ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select>`;
       const roleSel = `<select data-id="${p.id}" data-k="role"><option value="">-</option>${ROLE_OPTS.map((r) => `<option ${raw.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select>`;
@@ -132,17 +142,16 @@
     renderPlayers(); save('팀을 배정했어요');
   });
   function autoAssign() {
-    const res = SKL.assignTeams(state.players, state.meta.teamCount);
+    const res = SKL.assignTeams(state.players, state.meta.teamCount, SKL.medians(state.meta));
     state.players.forEach((p) => Object.assign(p, res[p.id] || {}));
   }
 
   /* ---------- 선수 편집 ---------- */
   let editingId = null, photoData = '';
   $('#qs').innerHTML = QUESTIONS.map((q, i) => `<div class="q">
-      <div class="n">Q${i + QUESTION_OFFSET}</div><div class="t">${esc(q[0])}</div>
+      <div class="n">${esc(q[0])}</div><div class="t">${esc(q[1])} ↔ ${esc(q[2])}</div>
       <div class="sp"></div>
-      <label class="opt"><input type="radio" name="q${i}" value="A"> A. ${esc(q[1])}</label>
-      <label class="opt"><input type="radio" name="q${i}" value="B"> B. ${esc(q[2])}</label></div>`).join('');
+      ${[1, 2, 3, 4].map((n) => `<label class="opt"><input type="radio" name="q${i}" value="${n}"> ${n}${n === 1 ? ' ' + esc(q[1]) : n === 4 ? ' ' + esc(q[2]) : ''}</label>`).join('')}</div>`).join('');
 
   function openEdit(id) {
     editingId = id || null;
@@ -151,12 +160,13 @@
     const p = id ? state.players.find((q) => q.id === id) : null;
     $('#editTitle').textContent = p ? `선수 수정 · QR ID ${p.id}` : '선수 추가';
     const used = state.players.map((q) => Number(q.number));
-    const v = p || { name: '', nickname: '', number: [...Array(99).keys()].map((n) => n + 1).find((n) => !used.includes(n)), emoji: '', moment: '', gk: 'ok', play: 'full', exp: 0, answers: '' };
-    ['name', 'nickname', 'number', 'emoji', 'moment', 'gk', 'play'].forEach((k) => { f.elements[k].value = v[k] == null ? '' : v[k]; });
+    const v = p || { name: '', nickname: '', number: [...Array(99).keys()].map((n) => n + 1).find((n) => !used.includes(n)), nameEn: '', moment: '', gk: 'ok', play: 'full', exp: 0, answers: '' };
+    ['name', 'nickname', 'number', 'nameEn', 'moment', 'gk', 'play'].forEach((k) => { f.elements[k].value = v[k] == null ? '' : v[k]; });
     f.elements.exp.value = String(v.exp || 0);
-    const a = SKL.normalizeAnswers(v.answers);
+    const { a } = SKL.normalizeAnswers(v.answers);
+    const has = String(v.answers || '').replace(/[^1-4AB]/gi, '');
     for (let i = 0; i < 12; i++) {
-      const val = v.answers ? a[i] : null;
+      const val = i < has.length ? String(a[i]) : null;
       f.querySelectorAll(`input[name=q${i}]`).forEach((r) => { r.checked = r.value === val; });
     }
     photoData = v.photo || '';
@@ -169,24 +179,22 @@
     for (let i = 0; i < 12; i++) {
       const r = $(`#editForm input[name=q${i}]:checked`);
       if (!r) missing++;
-      s += r ? r.value : 'B';
+      s += r ? r.value : '3';
     }
     return { s, missing };
   }
   function preview() {
     const { s, missing } = readAnswers();
-    const { x, y } = SKL.scores(s);
-    const t = SKL.typeOf(x, y);
-    $('#typePreview').innerHTML = `<span class="badge" style="--c:${TYPES[t].color}">${t}</span>${TYPES[t].ko} · 과감 ${x} / 해결 ${y}${missing ? ` <small class="warn">(${missing}문항 미응답 → B로 계산)</small>` : ''}`;
+    const e = SKL.enrich({ answers: s }, SKL.medians(state.meta));
+    $('#typePreview').innerHTML = `<span class="badge" style="--c:${TYPES[e.type].color}">${e.type}</span>${esc(e.subtype)} · 과감 ${e.x}/18 · 해결 ${e.y}/18${missing ? ` <small class="warn">(${missing}문항 미응답 → 3으로 계산)</small>` : ''}`;
   }
   function showPhoto() {
     const el = $('#phPrev');
     el.style.backgroundImage = photoData ? `url('${SKLStore.resolvePhoto(photoData)}')` : '';
     $('#phPath').value = photoData && !photoData.startsWith('data:') ? photoData : '';
-    el.textContent = photoData ? '' : ($('#editForm').elements.emoji.value || '📷');
+    el.textContent = photoData ? '' : '📷';
   }
   $('#qs').addEventListener('change', preview);
-  $('#editForm').elements.emoji.addEventListener('input', showPhoto);
   $('#phFile').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -204,7 +212,7 @@
       name: f.elements.name.value.trim(),
       nickname: f.elements.nickname.value.trim(),
       number: f.elements.number.value === '' ? '' : Number(f.elements.number.value),
-      emoji: f.elements.emoji.value.trim(),
+      nameEn: f.elements.nameEn.value.trim(),
       moment: f.elements.moment.value.trim(),
       photo: photoData,
       answers: s,
@@ -215,7 +223,7 @@
     if (editingId) {
       Object.assign(state.players.find((q) => q.id === editingId), data);
     } else {
-      let id; do { id = SKL.newId(); } while (state.players.some((q) => q.id === id));
+      const id = nextId();
       state.players.push(Object.assign({ id }, data));
     }
     $('#editModal').classList.remove('show');
@@ -283,32 +291,40 @@
       name: col((h) => /^(Q\d+\.\s*)?이름/.test(h)),
       nickname: col((h) => h.includes('닉네임')),
       number: col((h) => h.includes('등번호')),
-      emoji: col((h) => h.includes('이모지')),
+      nameEn: col((h) => h.includes('영문')),
       moment: col((h) => h.includes('최고의 순간')),
       gk: col((h) => h.includes('골키퍼')),
       play: col((h) => h.includes('뛸 수')),
       exp: col((h) => h.includes('구력')),
     };
-    const qIdx = QUESTIONS.map((q) => col((h) => h.includes(q[0].slice(0, 10))));
+    // 문항 열 찾기: 제목에 태그 문구가 있으면 그 열, 아니면 1~4 숫자만 들어 있는 열 12개를 순서대로
+    let qIdx = QUESTIONS.map((q) => col((h) => h.includes(q[1].slice(1)) || h.includes(q[2].slice(1))));
+    if (qIdx.some((v) => v < 0)) {
+      const numeric = head.map((_, ci) => ci).filter((ci) => rows.slice(1).every((r) => /^\s*[1-4]\b/.test(String(r[ci] || ''))));
+      if (numeric.length >= 12) qIdx = numeric.slice(0, 12);
+    }
     const missing = [];
     if (idx.nickname < 0) missing.push('닉네임');
     qIdx.forEach((v, i) => { if (v < 0) missing.push(`Q${i + QUESTION_OFFSET}`); });
-    if (missing.length) throw new Error(`이 열을 찾지 못했어요: ${missing.join(', ')}\n설문 문항 문구가 설문지와 같은지 확인해주세요.`);
+    if (missing.length) throw new Error(`이 열을 찾지 못했어요: ${missing.join(', ')}\n성향 문항 12개는 1~4 숫자 응답 열이어야 해요.`);
     const pick = (r, i) => (i >= 0 ? String(r[i] || '').trim() : '');
     let added = 0, updated = 0;
     rows.slice(1).forEach((r) => {
       const nickname = pick(r, idx.nickname);
       if (!nickname) return;
-      const answers = qIdx.map((ci, i) => {
+      const answers = qIdx.map((ci) => {
         const v = pick(r, ci);
-        if (/^A([.\s)]|$)/i.test(v) || v === QUESTIONS[i][1]) return 'A';
-        return 'B';
+        const m = v.match(/[1-4]/);
+        if (m) return m[0];
+        if (/^A([.\s)]|$)/i.test(v)) return '1';
+        if (/^B([.\s)]|$)/i.test(v)) return '4';
+        return '3';
       }).join('');
       const gkv = pick(r, idx.gk), plv = pick(r, idx.play), exv = pick(r, idx.exp);
       const data = {
         name: pick(r, idx.name), nickname,
         number: Number(pick(r, idx.number).replace(/[^0-9]/g, '')) || '',
-        emoji: pick(r, idx.emoji).slice(0, 4), moment: pick(r, idx.moment), answers,
+        nameEn: pick(r, idx.nameEn), moment: pick(r, idx.moment), answers,
         gk: gkv.includes('피하') ? 'no' : gkv.includes('좋아') ? 'yes' : 'ok',
         play: plv.includes('응원') ? 'cheer' : plv.includes('절반') ? 'half' : 'full',
         exp: exv.includes('이상') ? 2 : exv.includes('1~2') ? 1 : 0,
@@ -316,7 +332,7 @@
       const ex = state.players.find((p) => p.nickname === nickname);
       if (ex) { Object.assign(ex, data); updated++; }
       else {
-        let id; do { id = SKL.newId(); } while (state.players.some((q) => q.id === id));
+        const id = nextId();
         state.players.push(Object.assign({ id, photo: '' }, data)); added++;
       }
     });
@@ -348,25 +364,33 @@
   });
 
   /* ---------- ④ 배포 / 백업 ---------- */
-  function publicJson() {
-    if (state.players.some((p) => p.team === undefined || p.team === null)) {
+  function ensureTeams() {
+    if (state.players.some((p) => p.team === undefined || p.team === null || p.team === '')) {
       autoAssign(); renderPlayers(); save();
       toast('팀이 비어 있는 선수가 있어서 자동 배정했어요');
     }
-    const meta = metaForQR();
-    const pub = SKL.toPublic({ meta, players: state.players });
-    pub.players.forEach((p) => { p.qrUrl = SKL.qrUrl(meta, p.id); }); // QR에 들어간 주소도 함께 저장
-    pub.updatedAt = new Date().toISOString();
-    return JSON.stringify(pub, null, 2);
+  }
+  /** 배포용 선수 표 (실명·구력은 빠져요) */
+  function publicCsv() {
+    ensureTeams();
+    const pub = SKL.toPublic({ meta: state.meta, players: state.players });
+    const rest = (state.pending || []).map((id) => ({ id })); // 아직 안 채운 QR 줄도 유지
+    return SKLCSV.fromPlayers(pub.players.concat(rest), SKL.teamsOf(state.meta));
+  }
+  function publicMeta() {
+    const m = Object.assign({}, state.meta);
+    m.teams = SKL.teamsOf(state.meta);
+    return JSON.stringify(m, null, 2) + '\n';
   }
   function downloadText(text, name) {
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+    a.href = URL.createObjectURL(new Blob([text], { type: name.endsWith('.csv') ? 'text/csv;charset=utf-8' : 'application/json' }));
     a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   const stamp = () => new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  $('#dlPublic').addEventListener('click', () => downloadText(publicJson(), 'players.json'));
+  $('#dlPublic').addEventListener('click', () => downloadText(publicCsv(), 'players.csv'));
+  $('#dlMeta').addEventListener('click', () => downloadText(publicMeta(), 'meta.json'));
   $('#dlBackup').addEventListener('click', () => downloadText(JSON.stringify(state, null, 2), `skliker-admin-backup-${stamp()}.json`));
   $('#ulBackup').addEventListener('click', () => $('#backupFile').click());
   $('#backupFile').addEventListener('change', async (e) => {
@@ -381,7 +405,7 @@
     e.target.value = '';
   });
   $('#loadPublic').addEventListener('click', async () => {
-    if (!confirm('사이트에 올라가 있는 players.json으로 다시 시작할까요? 실명·구력처럼 배포 파일에 없는 정보는 사라져요.')) return;
+    if (!confirm('사이트에 올라가 있는 players.csv로 다시 시작할까요? 실명·구력처럼 배포 파일에 없는 정보는 사라져요.')) return;
     try {
       state = await SKLStore.fetchPublic();
       state.players.forEach((p) => { delete p.qrUrl; });
@@ -390,7 +414,7 @@
   });
 
   // GitHub 바로 저장
-  const gh = Object.assign({ owner: '', repo: '', branch: 'main', path: 'data/players.json' }, JSON.parse(localStorage.getItem(GH_KEY) || '{}'));
+  const gh = Object.assign({ owner: '', repo: '', branch: 'main', path: 'data/players.csv' }, JSON.parse(localStorage.getItem(GH_KEY) || '{}'));
   if (!gh.owner && location.hostname.endsWith('github.io')) {
     gh.owner = location.hostname.split('.')[0];
     gh.repo = location.pathname.split('/').filter(Boolean)[0] || '';
@@ -407,26 +431,32 @@
   }
   $('#ghSave').addEventListener('click', async () => {
     const msg = $('#ghMsg');
-    const cfg = { owner: $('#ghOwner').value.trim(), repo: $('#ghRepo').value.trim(), branch: $('#ghBranch').value.trim() || 'main', path: ($('#ghPath').value.trim() || 'data/players.json').replace(/^\/+/, '') };
+    const cfg = { owner: $('#ghOwner').value.trim(), repo: $('#ghRepo').value.trim(), branch: $('#ghBranch').value.trim() || 'main', path: ($('#ghPath').value.trim() || 'data/players.csv').replace(/^\/+/, '') };
     const token = $('#ghToken').value.trim();
     if (!cfg.owner || !cfg.repo || !token) { msg.className = 'ghmsg err'; msg.textContent = '계정, 저장소, 토큰을 모두 입력해주세요.'; return; }
     localStorage.setItem(GH_KEY, JSON.stringify(cfg));
     localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY);
     ($('#ghRemember').checked ? localStorage : sessionStorage).setItem(TOKEN_KEY, token);
 
-    const api = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path.split('/').map(encodeURIComponent).join('/')}`;
+    const apiOf = (path) => `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
     const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
     msg.className = 'ghmsg'; msg.textContent = '저장 중…';
-    try {
+    async function put(path, text, message) {
+      const api = apiOf(path);
       let sha;
       const g = await fetch(`${api}?ref=${encodeURIComponent(cfg.branch)}`, { headers });
       if (g.ok) sha = (await g.json()).sha;
       else if (g.status !== 404) throw new Error(await ghError(g));
-      const body = { message: `선수 데이터 업데이트 (${state.players.length}명)`, content: b64utf8(publicJson()), branch: cfg.branch };
+      const body = { message, content: b64utf8(text), branch: cfg.branch };
       if (sha) body.sha = sha;
       const r = await fetch(api, { method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, headers), body: JSON.stringify(body) });
       if (!r.ok) throw new Error(await ghError(r));
-      const j = await r.json();
+      return r.json();
+    }
+    try {
+      const metaPath = cfg.path.replace(/[^/]*$/, 'meta.json');
+      await put(metaPath, publicMeta(), '행사 설정 업데이트');
+      const j = await put(cfg.path, publicCsv(), `선수 데이터 업데이트 (${state.players.length}명)`);
       msg.className = 'ghmsg ok';
       msg.textContent = `저장했어요 ✓ (커밋 ${j.commit.sha.slice(0, 7)})\n1~2분 뒤 사이트에 반영돼요.`;
     } catch (e) {

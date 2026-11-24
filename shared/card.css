@@ -1,52 +1,77 @@
-/* 선수카드 원본 크기 630x880px. 표시 크기는 .skl-card-wrap에서 scale로 조절 */
+/* 선수카드 원본 크기 630x880px. 표시 크기는 .skl-card-wrap에서 scale로 조절
+ * Design 시안 "SK라이커 선수 카드 시안"과 같은 모양 */
 .skl-card-wrap { position: relative; width: calc(630px * var(--scale, .4)); height: calc(880px * var(--scale, .4)); flex: none; }
 .skl-card-wrap > .skl-card { position: absolute; left: 0; top: 0; transform: scale(var(--scale, .4)); transform-origin: top left; }
 
-.skl-card { width: 630px; height: 880px; border-radius: 22px; position: relative; overflow: hidden; font-family: var(--font); }
+.skl-card { width: 630px; height: 880px; box-sizing: border-box; padding: 12px; background: #0B0B0B; border-radius: 26px; font-family: 'Noto Sans KR', var(--font); color: #fff; overflow: hidden; }
+.skl-card * { box-sizing: border-box; }
+.cf-in, .cb-in { position: relative; height: 100%; border-radius: 16px; overflow: hidden; background: #111; border: 1px solid #2E2E2E; }
+.chrome { background-color: #E7E9ED; background-image: repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 26px, rgba(255,255,255,.6) 26px 29px, rgba(0,0,0,.03) 29px 56px); }
+
+/* 엠블럼 */
+.skl-emblem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1; }
+.skl-emblem b { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1.5px; color: #fff; }
+.skl-emblem i { font-style: normal; font-family: 'Anton', sans-serif; font-size: 36px; color: #E4F218; }
+.skl-emblem small { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 9px; letter-spacing: 1px; color: #BDBDBD; }
 
 /* 앞면 */
-.cf { background: #F7F6FA; }
-.cf-tex { position: absolute; inset: 0; background: repeating-linear-gradient(118deg, rgba(59,20,102,.045) 0 2px, transparent 2px 22px); }
-.cf-photo { position: absolute; left: -10px; bottom: 84px; width: 420px; height: 540px; }
-.cf-photo svg { width: 100%; height: 100%; }
-.cf-photo-img { position: absolute; left: 0; top: 0; bottom: 56px; width: 62%; background: 40% 20%/cover no-repeat; clip-path: polygon(0 0, 100% 0, 52% 100%, 0 100%); }
-.cf-panel { position: absolute; inset: 0; background: linear-gradient(160deg, #4A1C80 0%, #2A0D52 70%); clip-path: polygon(58% 0, 100% 0, 100% 100%, 30% 100%); }
-.cf-stripe { position: absolute; background: var(--accent); transform: skewX(-22deg); }
-.cf-stripe.s1 { left: 385px; top: -20px; width: 16px; height: 930px; }
-.cf-stripe.s2 { left: 412px; top: -20px; width: 5px; height: 930px; opacity: .7; }
-.cf-num { position: absolute; right: 38px; top: 20px; font-size: 150px; font-weight: 900; color: #fff; letter-spacing: -6px; line-height: 1; font-family: 'Inter Display', 'Inter', var(--font); }
-.cf-season { position: absolute; left: 36px; top: 36px; font-size: 15px; font-weight: 800; color: #3B1466; letter-spacing: 3px; line-height: 1.3; }
-.cf-pos { position: absolute; right: 40px; top: 205px; font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 4px; }
-.cf-name { position: absolute; right: 38px; top: 240px; max-width: 330px; font-size: 72px; font-weight: 900; color: #fff; text-align: right; line-height: 1.05; letter-spacing: -2px; word-break: keep-all; }
-.cf-alias { position: absolute; right: 40px; top: 335px; font-size: 19px; font-weight: 600; color: #E8DDF7; }
-.cf-sign { position: absolute; left: 50px; bottom: 110px; font-size: 54px; color: #fff; font-family: 'Nanum Pen Script', 'Noto Serif CJK KR', serif; font-weight: 700; transform: rotate(-9deg); opacity: .9; text-shadow: 0 2px 6px rgba(0,0,0,.35); }
-.cf-emb { position: absolute; right: 36px; bottom: 80px; width: 118px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.3)); }
-.cf-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: #1E0A3C; color: #CDB8EE; font-size: 13px; font-weight: 700; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; border-top: 5px solid var(--accent); }
+.cf-lime { position: absolute; left: 0; right: 0; top: 0; height: 648px; background: #E4F218; clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%); }
+.cf-top { position: absolute; left: 0; right: 0; top: 0; height: 640px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%); }
+.cf-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 4%; }
+.cf-sil { position: absolute; left: 50%; bottom: 60px; width: 420px; height: 520px; transform: translateX(-50%); opacity: .9; }
+.cf-sil svg { width: 100%; height: 100%; }
+.cf-circ { position: absolute; top: 22px; width: 104px; height: 104px; border-radius: 50%; background: #111; border: 3px solid #E4F218; display: flex; align-items: center; justify-content: center; }
+.cf-type { left: 22px; flex-direction: column; gap: 2px; }
+.cf-type small { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: 2px; color: #8A8A8A; }
+.cf-type b { font-size: 22px; font-weight: 900; color: #E4F218; letter-spacing: -.5px; }
+.cf-emb { right: 22px; box-shadow: inset 0 0 0 6px #111, inset 0 0 0 7px #5A5A5A; }
+.cf-numwrap { position: absolute; right: 22px; top: 525px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.cf-num { position: relative; text-align: center; filter: drop-shadow(0 16px 22px rgba(0,0,0,.5)); font-family: 'Anton', sans-serif; font-size: 260px; line-height: .88; letter-spacing: -4px; }
+.cf-num .sh { position: absolute; left: 0; right: 0; top: 2px; color: #8E9800; text-shadow: 0 1px 0 #A3AE00, 0 2px 0 #9CA700, 0 3px 0 #95A000, 0 4px 0 #8E9800, 0 5px 0 #879100, 0 6px 0 #7F8800; }
+.cf-num .fg { position: relative; color: transparent; background-image: radial-gradient(ellipse 80% 55% at 45% 22%, #FBFFD0 0%, #EEF85A 32%, #E4F218 55%, #BFCB0A 100%); -webkit-background-clip: text; background-clip: text; }
+.cf-pos { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.cf-pos b { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: 4px; color: #E4F218; }
+.cf-pos i { width: 1px; height: 20px; background: #5A5A5A; }
+.cf-pos span { font-size: 18px; font-weight: 700; }
+.cf-bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 26px 20px; display: flex; flex-direction: column; gap: 8px; }
+.cf-name { font-family: 'Anton', 'Noto Sans KR', sans-serif; font-size: 64px; line-height: .95; letter-spacing: 1px; max-width: 330px; overflow-wrap: anywhere; }
+.cf-nick { font-size: 22px; font-weight: 700; color: #D6D6D6; }
+.cf-foot { display: flex; justify-content: space-between; margin-top: 6px; padding-top: 10px; border-top: 1px solid #2E2E2E; font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 2.5px; color: #8A8A8A; }
+.cf-foot b { color: #E4F218; font-weight: 500; }
 
 /* 뒷면 */
-.cb { background: radial-gradient(circle at 85% 0%, #5B2A99 0%, #2A0D52 45%, #1A0736 100%); color: #fff; padding: 40px 40px 0; }
-.cb-head { display: flex; justify-content: space-between; align-items: flex-start; }
-.cb-k { font-size: 14px; letter-spacing: 4px; color: #B9A2E0; font-weight: 800; }
-.cb-n { font-size: 46px; font-weight: 900; margin-top: 6px; letter-spacing: -1px; }
-.cb-n span { font-size: 30px; color: #B9A2E0; font-weight: 800; }
-.cb-badge { background: var(--accent); color: #1E0A3C; font-weight: 900; font-size: 20px; padding: 10px 16px; border-radius: 10px; letter-spacing: 2px; }
-.cb-type { margin-top: 14px; font-size: 24px; font-weight: 800; color: var(--accent); }
-.cb-type em { font-style: normal; color: #fff; font-weight: 600; margin-left: 8px; font-size: 20px; }
-.cb-mid { display: flex; gap: 26px; margin-top: 26px; align-items: center; }
-.cb-map { width: 232px; flex: none; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 10px; text-align: center; }
-.cb-cap { font-size: 12px; color: #B9A2E0; margin-top: 4px; }
-.cb-bars { flex: 1; }
-.cb-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; font-size: 15px; font-weight: 700; color: #D7C8F0; }
-.cb-bar span { width: 34px; } .cb-bar .r { text-align: right; }
-.cb-track { flex: 1; height: 10px; background: rgba(255,255,255,.15); border-radius: 6px; position: relative; }
-.cb-fill { height: 100%; background: var(--accent); border-radius: 6px; }
-.cb-knob { position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid var(--accent); transform: translate(-50%, -50%); }
-.cb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-.cb-chip { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); padding: 6px 12px; border-radius: 20px; font-size: 15px; font-weight: 700; }
-.cb-moment { margin-top: 28px; background: rgba(255,255,255,.07); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 20px; font-size: 21px; font-weight: 700; }
-.cb-mk { font-size: 12px; color: #B9A2E0; letter-spacing: 3px; margin-bottom: 6px; }
-.cb-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: #fff; color: #1E0A3C; display: flex; align-items: center; gap: 24px; padding: 0 40px; border-top: 6px solid var(--accent); }
-.cb-qr img { width: 150px; height: 150px; display: block; image-rendering: pixelated; }
-.cb-qt { font-size: 17px; line-height: 1.5; font-weight: 500; }
-.cb-qt b { font-size: 26px; font-weight: 900; letter-spacing: 2px; color: #3B1466; }
-.cb-team { display: table; margin-top: 10px; color: #fff; font-weight: 800; padding: 5px 14px; border-radius: 20px; font-size: 15px; }
+.cb-in { display: flex; flex-direction: column; }
+.cb-head { flex-shrink: 0; padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-bottom: 3px solid #E4F218; }
+.cb-no { width: 64px; height: 64px; background: #E4F218; display: flex; align-items: center; justify-content: center; font-family: 'Anton', sans-serif; font-size: 42px; color: #111; }
+.cb-name { flex-grow: 1; font-family: 'Anton', 'Noto Sans KR', sans-serif; font-size: 42px; line-height: 1; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-club { text-align: right; font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 12px; letter-spacing: 2px; line-height: 1.6; color: #8A8A8A; }
+.cb-body { flex-grow: 1; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.cb-box { background: #181818; border: 1px solid #2A2A2A; padding: 14px 16px; display: flex; flex-direction: column; gap: 9px; }
+.cb-k { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 3px; color: #E4F218; white-space: pre; }
+.cb-type { display: flex; align-items: center; gap: 12px; }
+.cb-badge { padding: 3px 12px; background: #E4F218; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 3px; color: #111; }
+.cb-type b { font-size: 30px; line-height: 1.15; font-weight: 900; }
+.cb-line { font-size: 19px; font-weight: 700; color: #E4F218; }
+.cb-persona { font-size: 16px; line-height: 1.6; color: #CFCFCF; }
+.cb-tags { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+.cb-tags span { padding: 5px 14px; background: #E4F218; font-size: 18px; font-weight: 900; color: #111; }
+.cb-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; min-height: 0; }
+.cb-grid .cb-box { padding: 14px; gap: 6px; }
+.cb-radar { width: 100%; flex-grow: 1; min-height: 200px; display: block; font-family: 'Noto Sans KR', sans-serif; }
+.cb-pos { gap: 8px !important; }
+.mp { position: relative; flex-grow: 1; min-height: 150px; background: #111; border: 1px solid #2E2E2E; overflow: hidden; }
+.mp-q { position: absolute; background: rgba(228,242,24,.14); }
+.mp-v { position: absolute; top: 0; bottom: 0; border-left: 1px dashed #6E6E6E; }
+.mp-h { position: absolute; left: 0; right: 0; border-top: 1px dashed #6E6E6E; }
+.mp-l { position: absolute; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; }
+.mp-dot { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: #E4F218; border: 3px solid #111; box-shadow: 0 0 0 5px rgba(228,242,24,.3); }
+.cb-xy { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cb-xy div { display: flex; align-items: baseline; gap: 6px; }
+.cb-xy span { font-size: 15px; font-weight: 700; color: #D6D6D6; }
+.cb-xy b { font-family: 'Anton', sans-serif; font-size: 26px; line-height: 1; font-weight: 400; }
+.cb-xy small { font-size: 12px; color: #8A8A8A; }
+.cb-hl { flex-direction: row !important; align-items: center; gap: 16px !important; }
+.cb-hl > div { flex-grow: 1; display: flex; flex-direction: column; gap: 6px; }
+.cb-moment { font-size: 19px; font-weight: 700; line-height: 1.45; min-height: 27px; }
+.cb-qr { width: 76px; height: 76px; flex-shrink: 0; border: 3px solid #E4F218; background: #fff; image-rendering: pixelated; }
+.skl-card .ko, .ko { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; letter-spacing: -.03em; }

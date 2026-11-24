@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2A0D52">
+<meta name="theme-color" content="#0B0B0B">
 <title>SK라이커 · 나의 포지션</title>
 <link rel="stylesheet" href="shared/theme.css">
 <link rel="stylesheet" href="shared/card.css">
@@ -12,12 +12,13 @@
 <body class="skl-dark">
 <div id="app"><div class="skl-loading">불러오는 중…</div></div>
 
-<button id="scanBtn" class="scan-btn" hidden>📷 카드 스캔</button>
+<button id="scanBtn" class="scan-btn" hidden>카드 스캔</button>
 
 <div id="scanner" class="scanner" hidden>
   <video id="video" playsinline muted></video>
   <canvas id="canvas" hidden></canvas>
-  <div class="frame"></div>
+  <div class="frame"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><i class="laser"></i></div>
+  <div class="scan-k">SCAN YOUR CARD</div>
   <p class="scan-msg" id="scanMsg">선수카드 뒷면의 QR을 네모 안에 맞춰주세요</p>
   <button class="scan-close" id="scanClose">닫기</button>
 </div>
@@ -26,6 +27,7 @@
 <script src="vendor/jsQR.js"></script>
 <script src="vendor/qrcode.js"></script>
 <script src="shared/logic.js"></script>
+<script src="shared/csv.js"></script>
 <script src="shared/store.js"></script>
 <script src="shared/qr.js"></script>
 <script src="shared/card.js"></script>

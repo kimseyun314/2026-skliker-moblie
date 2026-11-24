@@ -5,30 +5,31 @@
 (function (root) {
   'use strict';
 
+  // 선수카드 시안(검정 + 라임)과 같은 유형 정의. color는 지도·명단에서 유형을 구분하는 색
   const TYPES = {
-    PIVO:    { ko: '피보',     alias: '돌격하는 해결사',   color: '#FF5A6E', ability: '돌파력', kw: ['추진력', '돌파력', '과감함', '마무리'], corner: [6, 6] },
-    ALA:     { ko: '아라',     alias: '쉬지 않는 연결고리', color: '#FFB627', ability: '활동력', kw: ['활동량', '적응력', '공수 전환', '센스'], corner: [6, 0] },
-    FIXO:    { ko: '픽소',     alias: '판을 읽는 사령관',   color: '#2EC4B6', ability: '조율력', kw: ['시야', '안정감', '조율', '리더십'], corner: [0, 0] },
-    GOLEIRO: { ko: '골레이로', alias: '마지막 수호신',      color: '#9BE15D', ability: '수호력', kw: ['책임감', '침착함', '담대함', '목소리'], corner: [0, 6] },
+    PIVO:    { ko: '피보',     sub: ['돌파형', '결정형'], color: '#E4F218', ability: '돌파력', corner: [18, 18],
+               line: '결정적인 순간, 공을 받고 싶어하는 사람',
+               persona: '승부욕이 있고 결과로 말한다. 중요한 순간에 책임을 맡고 싶어하고, 주목받는 걸 부담스러워하지 않는다.' },
+    ALA:     { ko: '아라',     sub: ['질주형', '연결형'], color: '#FF8A3D', ability: '활동력', corner: [18, 0],
+               line: '어디든 먼저 달려가 사람을 잇는 사람',
+               persona: '호기심과 에너지가 많고 어디든 먼저 간다. 새로운 사람과 환경에 빨리 적응하고 사람과 사람을 잇는다.' },
+    FIXO:    { ko: '픽소',     sub: ['설계형', '조율형'], color: '#3DD6F5', ability: '조율력', corner: [0, 0],
+               line: '한 발 뒤에서 판을 보고 모두를 움직이는 사람',
+               persona: '큰 그림을 보고 준비하는 사람. 서두르지 않고, 모두의 의견을 모아 방향을 잡는 배려형 리더.' },
+    GOLEIRO: { ko: '골레이로', sub: ['철벽형', '책임형'], color: '#B79CFF', ability: '수호력', corner: [0, 18],
+               line: '흔들릴 때 끝까지 버텨주는 마지막 사람',
+               persona: '흔들리는 상황에서도 침착하다. 맡은 일은 끝까지 책임지고, 묵묵하지만 결정적일 때 믿음을 준다.' },
   };
   const TYPE_ORDER = ['PIVO', 'ALA', 'FIXO', 'GOLEIRO'];
 
-  // 설문지 PART 2 (Q7~Q18). 앞 6개 = 과감(A)/신중(B), 뒤 6개 = 해결(A)/연결(B)
+  // 성향 문항 12개 (1~4점). 앞 6개 = 과감, 뒤 6개 = 해결. 1에 가까울수록 왼쪽(태그 0) 성향
   const QUESTIONS = [
-    ['회식 메뉴를 고를 때 나는', '처음 보는 신메뉴에 도전한다', '검증된 단골 메뉴를 고른다'],
-    ['경기 중 내 앞에 빈 공간이 열렸다', '일단 공을 치고 달린다', '주변을 한 번 보고 판단한다'],
-    ['새로운 일을 시작할 때 나는', '일단 해보면서 고친다', '계획부터 세운다'],
-    ['단톡방에 "이거 해줄 사람?"이 올라오면', '먼저 손을 든다', '상황을 보고 필요하면 나선다'],
-    ['공을 잡았는데 상대가 바로 붙었다', '개인기로 제쳐본다', '안전하게 뒤로 돌린다'],
-    ['나의 여행 스타일은', '그날그날 즉흥으로', '미리 짜둔 일정표대로'],
-    ['팀 과제에서 나는', '핵심 파트를 맡아서 끝내는 사람', '사람들 사이를 조율하는 사람'],
-    ['골 찬스인데 옆에 더 좋은 위치의 동료가 있다', '내가 찬다', '패스한다'],
-    ['더 듣고 싶은 칭찬은', '"너 덕분에 이겼어"', '"너 덕분에 편했어"'],
-    ['우리 팀이 위기에 빠졌을 때 나는', '"내가 막을게"', '"같이 커버하자!"'],
-    ['친구 모임에서 나는', '이야기의 주인공', '분위기를 띄우고 사람들을 이어주는 사람'],
-    ['경기 중 실수했을 때 나는', '다음 플레이로 직접 만회한다', '팀에 빠르게 공유하고 같이 수습한다'],
+    ['Q1', '#즉흥외출러', '#계획휴식러'], ['Q2', '#먼저인사러', '#관찰후합류'], ['Q3', '#일단부딪힘', '#자료조사러'],
+    ['Q4', '#신메뉴헌터', '#단골파'], ['Q5', '#직감결정', '#신중결정'], ['Q6', '#변화즐김', '#정리필요'],
+    ['Q7', '#끝까지책임', '#연결고리'], ['Q8', '#해결책제시', '#공감리스너'], ['Q9', '#해냄의아이콘', '#함께가좋아'],
+    ['Q10', '#결론메이커', '#분위기중재'], ['Q11', '#마감해결사', '#같이해결'], ['Q12', '#결과로증명', '#남을빛내는'],
   ];
-  const QUESTION_OFFSET = 7; // 설문지 번호 = index + 7
+  const QUESTION_OFFSET = 1; // 문항 번호 = index + 1
 
   const DEFAULT_TEAMS = [
     { name: '산타 FC', color: '#E63946' },
@@ -37,40 +38,66 @@
     { name: '트리 FC', color: '#2A9D8F' },
   ];
 
-  /** answers: 'AABABA BBAABA' 처럼 A/B 12개 (공백 무시) */
-  function normalizeAnswers(a) {
-    return String(a || '').toUpperCase().replace(/[^AB]/g, '').padEnd(12, 'B').slice(0, 12);
+  /**
+   * answers: "121223 132211"처럼 1~4 숫자 12개 (공백 무시).
+   * 예전 A/B 형식도 읽어요 (A=1, B=4).
+   * 반환: { a: [12개 숫자], valid }
+   */
+  function normalizeAnswers(ans) {
+    const chars = String(ans || '').toUpperCase().replace(/A/g, '1').replace(/B/g, '4').replace(/[^1-4]/g, '');
+    const valid = chars.length === 12;
+    const a = chars.padEnd(12, '3').slice(0, 12).split('').map(Number);
+    return { a, valid };
   }
   function scores(answers) {
-    const a = normalizeAnswers(answers);
-    let x = 0, y = 0;
-    for (let i = 0; i < 6; i++) if (a[i] === 'A') x++;
-    for (let i = 6; i < 12; i++) if (a[i] === 'A') y++;
-    return { x, y }; // x: 과감 0~6, y: 해결 0~6
+    const { a, valid } = normalizeAnswers(answers);
+    const pts = a.map((v) => 4 - v);
+    const x = pts.slice(0, 6).reduce((s, v) => s + v, 0);
+    const y = pts.slice(6).reduce((s, v) => s + v, 0);
+    return { x, y, a, valid }; // x: 과감 0~18, y: 해결 0~18
   }
-  function typeOf(x, y) {
-    const bold = x >= 4, solo = y >= 4;
-    if (bold && solo) return 'PIVO';
-    if (bold) return 'ALA';
-    if (solo) return 'GOLEIRO';
-    return 'FIXO';
+  function median(arr) {
+    if (!arr.length) return 9;
+    const s = arr.slice().sort((p, q) => p - q);
+    const m = Math.floor(s.length / 2);
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
   }
-  /** 각 유형 꼭짓점과의 거리로 0~100 적합도(능력치) 계산 */
+  /** 기준선: meta.medBold / meta.medSolve 숫자가 있으면 그 값, 없으면 9 */
+  function medians(meta) {
+    const n = (v) => (typeof v === 'number' && isFinite(v) ? v : 9);
+    return { mx: n(meta && meta.medBold), my: n(meta && meta.medSolve) };
+  }
+  function typeOf(x, y, a, med) {
+    const { mx, my } = med || { mx: 9, my: 9 };
+    const bold = x > mx || (x === mx && a && a[1] <= 2);
+    const solve = y > my || (y === my && a && a[7] <= 2);
+    return bold ? (solve ? 'PIVO' : 'ALA') : (solve ? 'GOLEIRO' : 'FIXO');
+  }
+  /** 각 유형 꼭짓점과의 거리로 40~100 능력치 (카드 레이더와 같은 식) */
   function affinity(x, y) {
-    const max = Math.hypot(6, 6);
+    const max = 18 * Math.SQRT2;
     const out = {};
     for (const t of TYPE_ORDER) {
       const [cx, cy] = TYPES[t].corner;
-      const d = Math.hypot(x - cx, y - cy) / max;
-      out[t] = Math.round(40 + 60 * (1 - d));
+      out[t] = Math.round(100 - 60 * Math.hypot(x - cx, y - cy) / max);
     }
     return out;
   }
+  function tagsOf(a) {
+    const order = [1, 7, 0, 2, 3, 4, 5, 6, 8, 9, 10, 11];
+    const tags = [];
+    order.forEach((i) => { if (tags.length < 2 && (a[i] === 1 || a[i] === 4)) tags.push(QUESTIONS[i][a[i] === 1 ? 1 : 2]); });
+    order.forEach((i) => { if (tags.length < 2 && (a[i] === 2 || a[i] === 3)) tags.push(QUESTIONS[i][a[i] === 2 ? 1 : 2]); });
+    return tags;
+  }
   /** 화면용 계산값을 붙인 새 객체 반환 */
-  function enrich(p) {
-    const { x, y } = scores(p.answers);
-    const type = typeOf(x, y);
-    return Object.assign({}, p, { x, y, type, aff: affinity(x, y), role: p.role || type });
+  function enrich(p, med) {
+    const m = med || { mx: 9, my: 9 };
+    const { x, y, a, valid } = scores(p.answers);
+    const type = typeOf(x, y, a, m);
+    const t = TYPES[type];
+    const subtype = (Math.abs(x - m.mx) >= Math.abs(y - m.my) ? t.sub[0] : t.sub[1]) + ' ' + t.ko;
+    return Object.assign({}, p, { x, y, valid, type, subtype, tags: tagsOf(a), aff: affinity(x, y), role: p.role || type });
   }
 
   // 한 팀 포지션 우선순위 (5명 = GK, 픽소, 아라, 피보, 아라)
@@ -81,8 +108,8 @@
    * players: [{id, answers, gk:'yes'|'ok'|'no', play:'full'|'half'|'cheer', exp:0|1|2}]
    * 반환: { [id]: { team: 0..T-1, role: 'PIVO'|'ALA'|'FIXO'|'GOLEIRO'|'CHEER' } }
    */
-  function assignTeams(players, teamCount) {
-    const list = players.map(enrich);
+  function assignTeams(players, teamCount, med) {
+    const list = players.map((p) => enrich(p, med));
     const field = list.filter((p) => p.play !== 'cheer');
     const cheer = list.filter((p) => p.play === 'cheer');
     const T = Math.max(2, teamCount || Math.round(field.length / 5) || 2);
@@ -208,7 +235,7 @@
     return base + (base.includes('?') ? '&' : '?') + 'p=' + encodeURIComponent(id);
   }
 
-  const SKL = { TYPES, TYPE_ORDER, QUESTIONS, QUESTION_OFFSET, DEFAULT_TEAMS, normalizeAnswers, scores, typeOf, affinity, enrich, assignTeams, nearest, newId, toPublic, teamsOf, qrUrl, resolveTeams };
+  const SKL = { TYPES, TYPE_ORDER, QUESTIONS, QUESTION_OFFSET, DEFAULT_TEAMS, normalizeAnswers, scores, median, medians, typeOf, affinity, tagsOf, enrich, assignTeams, nearest, newId, toPublic, teamsOf, qrUrl, resolveTeams };
   if (typeof module !== 'undefined' && module.exports) module.exports = SKL;
   root.SKL = SKL;
 })(typeof window !== 'undefined' ? window : globalThis);

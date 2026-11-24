@@ -19,7 +19,7 @@
 </header>
 
 <main class="wrap">
-  <p class="intro">여기서 수정한 내용은 <b>이 브라우저에만 자동 저장</b>돼요. 다른 사람에게 보이게 하려면 아래 <b>④ 배포</b>에서 <code>players.json</code>을 저장소에 올려주세요.
+  <p class="intro">여기서 수정한 내용은 <b>이 브라우저에만 자동 저장</b>돼요. 다른 사람에게 보이게 하려면 아래 <b>④ 배포</b>에서 <code>players.csv</code>를 저장소에 올려주세요.
     실명과 구력은 관리용으로만 쓰이고 배포 파일에는 들어가지 않아요.</p>
 
   <!-- ① 행사 설정 -->
@@ -69,8 +69,8 @@
     <div class="deploy">
       <div class="dp">
         <h3>방법 A. 파일로 올리기</h3>
-        <p>배포용 파일을 받아서 GitHub 저장소의 <code>data/players.json</code>에 덮어써요.</p>
-        <button class="primary" id="dlPublic">배포용 players.json 다운로드</button>
+        <p>배포용 파일을 받아서 GitHub 저장소의 <code>data/players.csv</code>(선수)와 <code>data/meta.json</code>(행사 설정)에 덮어써요.</p>
+        <button class="primary" id="dlPublic">players.csv 다운로드</button> <button class="ghost" id="dlMeta">meta.json 다운로드</button>
       </div>
       <div class="dp">
         <h3>방법 B. GitHub에 바로 저장</h3>
@@ -79,7 +79,7 @@
           <label>계정 (owner)<input id="ghOwner" placeholder="my-id"></label>
           <label>저장소 (repo)<input id="ghRepo" placeholder="sk-liker-2026"></label>
           <label>브랜치<input id="ghBranch" placeholder="main"></label>
-          <label>파일 경로<input id="ghPath" placeholder="data/players.json"></label>
+          <label>파일 경로<input id="ghPath" placeholder="data/players.csv"></label>
         </div>
         <label class="full">토큰 (Fine-grained, 이 저장소의 Contents 읽기/쓰기만)<input id="ghToken" type="password" autocomplete="off" placeholder="github_pat_…"></label>
         <label class="chk"><input type="checkbox" id="ghRemember"> 이 브라우저에 토큰 기억하기 (공용 PC에서는 끄세요)</label>
@@ -91,7 +91,7 @@
         <p>실명·구력까지 포함된 전체 데이터예요. <b>저장소에 올리지 말고</b> 개인적으로 보관하세요.</p>
         <button class="ghost" id="dlBackup">백업 파일 내보내기</button>
         <button class="ghost" id="ulBackup">백업 불러오기</button>
-        <button class="ghost danger" id="loadPublic">사이트의 players.json으로 다시 시작</button>
+        <button class="ghost danger" id="loadPublic">사이트의 players.csv로 다시 시작</button>
         <input type="file" id="backupFile" accept="application/json" hidden>
       </div>
     </div>
@@ -105,7 +105,7 @@
     <label>실명 (비공개)<input name="name"></label>
     <label>닉네임 *<input name="nickname" required maxlength="10"></label>
     <label>등번호<input name="number" type="number" min="0" max="99"></label>
-    <label>이모지<input name="emoji" maxlength="4" placeholder="⚡"></label>
+    <label>영문 이름 (선택)<input name="nameEn" maxlength="16" placeholder="KIM SE-YEON"></label>
   </div>
   <label class="full">올해 풋살 최고의 순간<input name="moment" maxlength="40"></label>
   <div class="photo-row">
@@ -113,9 +113,9 @@
     <div><label class="file">사진 선택<input type="file" id="phFile" accept="image/*" hidden></label>
       <button type="button" class="ghost sm" id="phClear">사진 지우기</button>
       <small>사진 선택: 자동으로 작게 줄여서 데이터 안에 저장돼요.</small>
-      <input id="phPath" placeholder="또는 저장소 사진 경로 (예: photos/bx7k2m.jpg)" style="width:320px"></div>
+      <input id="phPath" placeholder="또는 저장소 사진 경로 (예: photos/09_번개.jpg)" style="width:320px"></div>
   </div>
-  <h3>성향 검사 (설문 Q7~Q18)</h3>
+  <h3>성향 검사 (12문항, 1~4점 · 1에 가까울수록 왼쪽 성향)</h3>
   <div class="qs" id="qs"></div>
   <div class="form-grid">
     <label>골키퍼 의향<select name="gk"><option value="yes">좋아요</option><option value="ok">잠깐은 괜찮아요</option><option value="no">피하고 싶어요</option></select></label>
@@ -140,6 +140,7 @@
 <script src="../../shared/config.js"></script>
 <script src="../../vendor/qrcode.js"></script>
 <script src="../../shared/logic.js"></script>
+<script src="../../shared/csv.js"></script>
 <script src="../../shared/store.js"></script>
 <script src="../../shared/qr.js"></script>
 <script src="../../shared/card.js"></script>
