@@ -11,7 +11,7 @@
   const { meta, players, teams } = D;
   const list = players.slice().sort((a, b) => ((a.team ?? 99) - (b.team ?? 99)) || (a.number - b.number));
   const qr = {};
-  list.forEach((p) => { qr[p.id] = SKLQR.dataUrl(SKL.qrUrl(meta, p.id), 360); });
+  list.forEach((p) => { qr[p.id] = SKLView.qrFile(p.id); }); // 미리 만든 qr/ID.png, 없으면 바로 생성
   $('#info').textContent = `${list.length}명 · QR 주소 ${meta.mobileUrl}`;
   if (/localhost|127\.0\.0\.1/.test(meta.mobileUrl)) $('#info').textContent += ' ⚠ 로컬 주소예요. 인쇄 전에 관리 페이지에서 GitHub Pages 주소로 바꾸세요.';
 

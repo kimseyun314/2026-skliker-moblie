@@ -14,6 +14,8 @@
     try { return new URL('../', (document.currentScript && document.currentScript.src) || location.href).href; } catch (e) { return ''; }
   })();
   const LOGO = BASE + 'assets/logo.png';
+  /** 미리 만든 QR 이미지 (qr/ID.png). 파일이 없으면 화면에서 바로 만들어요 */
+  const qrFile = (id) => BASE + 'qr/' + encodeURIComponent(id) + '.png';
 
   /** SK라이커 원형 로고 */
   function emblem(meta, cls) {
@@ -111,7 +113,7 @@ ${lab('FIXO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('GOLE
       </div>
       <div class="cb-box cb-hl">
         <div><div class="cb-k">04  ${season(meta)} HIGHLIGHT</div><div class="cb-moment">${esc(p.moment || '')}</div></div>
-        ${qrSrc ? `<img class="cb-qr" src="${qrSrc}" alt="QR">` : ''}
+        ${qrSrc ? `<img class="cb-qr" src="${qrSrc}" alt="QR" data-u="${esc(SKL.qrUrl(meta, p.id))}" onerror="this.onerror=null;if(window.SKLQR)this.src=SKLQR.dataUrl(this.dataset.u,360)">` : ''}
       </div>
     </div>
   </div>
@@ -169,5 +171,5 @@ ${lab('FIXO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('GOLE
     return g.join('');
   }
 
-  window.SKLView = { esc, disp, emblem, avatar, cardFront, cardBack, mapSVG, LIME, LOGO };
+  window.SKLView = { esc, disp, emblem, avatar, cardFront, cardBack, mapSVG, LIME, LOGO, qrFile };
 })();

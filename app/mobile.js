@@ -47,7 +47,7 @@
 
   const t = TYPES[me.type];
   const team = teams[me.team];
-  const qrSrc = SKLQR.dataUrl(SKL.qrUrl(meta, me.id), 300);
+  const qrSrc = SKLView.qrFile(me.id); // 미리 만든 qr/ID.png (없으면 카드에서 바로 생성)
   const scale = Math.min(0.5, (Math.min(window.innerWidth, 480) - 80) / 630);
 
   /* ---------- 1. 유형 공개 ---------- */
