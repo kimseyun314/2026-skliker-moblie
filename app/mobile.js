@@ -102,15 +102,24 @@
   /* ---------- 3. 우리 팀 (코치는 팀 밖에 따로) ---------- */
   const isCoach = (p) => p.role === 'COACH';
   const coaches = players.filter(isCoach);
-  const SLOTS = { PIVO: [[50, 14], [30, 16], [70, 16]], ALA: [[18, 40], [82, 40], [50, 32]], FIXO: [[50, 62], [30, 64], [70, 64]], GOLEIRO: [[50, 87], [35, 87]] };
+  // 포지션별 자리: 1명 = 가운데, 2명 = 양옆 대칭, 3명 = 가운데 + 양옆
+  const ROW = { PIVO: 15, ALA: 39, FIXO: 63, GOLEIRO: 87 };
+  const SPREAD = { PIVO: 22, ALA: 32, FIXO: 22, GOLEIRO: 16 };
+  const slotOf = (role, i, n) => {
+    const y = ROW[role] || ROW.ALA, d = SPREAD[role] || 22;
+    if (role === 'ALA' && n === 1) return [18, y]; // 아라 혼자면 측면
+    const xs = n === 1 ? [50] : n === 2 ? [50 - d, 50 + d] : [50, 50 - d, 50 + d].concat(Array.from({ length: Math.max(0, n - 3) }, (_, k) => 50 + (k % 2 ? 1 : -1) * (d + 12)));
+    return [xs[i % xs.length], n >= 3 && i > 0 && i < 3 ? y + 2 : y];
+  };
   const iAmCoach = isCoach(me);
   const mates = iAmCoach ? [] : players.filter((p) => !isCoach(p) && p.team === me.team);
   const used = {};
   const field = mates.filter((p) => p.role !== 'CHEER');
+  const roleCount = {};
+  field.forEach((p) => { roleCount[p.role] = (roleCount[p.role] || 0) + 1; });
   const marks = field.map((p, n) => {
-    const list = SLOTS[p.role] || SLOTS.ALA;
     const i = (used[p.role] = (used[p.role] || 0) + 1) - 1;
-    const [x, y] = list[i % list.length];
+    const [x, y] = slotOf(p.role, i, roleCount[p.role]);
     const isMe = p.id === me.id;
     return `<div class="pl${isMe ? ' me' : ''}" style="left:${x}%;top:${y}%;--c:${TYPES[p.type].color};--i:${n}"><div class="pl-up">${avatar(p)}<div class="pn">${esc(p.nickname)}</div><div class="pt">${p.role}</div></div><div class="pl-sh"></div></div>`;
   }).join('');
