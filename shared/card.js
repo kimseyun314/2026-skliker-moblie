@@ -9,9 +9,15 @@
     return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  /** 원형 엠블럼 (카드 오른쪽 위와 같은 모양) */
-  function emblem() {
-    return `<div class="skl-emblem"><b>FC LIKER</b><i>SL</i><small>FUTSAL CLUB</small></div>`;
+  // 로고 경로: 이 스크립트(shared/card.js) 위치 기준으로 assets/logo.png를 찾아요 (첫 화면·tools 어디서 열어도 같은 파일)
+  const BASE = (() => {
+    try { return new URL('../', (document.currentScript && document.currentScript.src) || location.href).href; } catch (e) { return ''; }
+  })();
+  const LOGO = BASE + 'assets/logo.png';
+
+  /** SK라이커 원형 로고 */
+  function emblem(meta, cls) {
+    return `<img class="skl-emblem${cls ? ' ' + cls : ''}" src="${LOGO}" alt="SK LIKER FUTSAL CLUB" draggable="false">`;
   }
 
   const SILHOUETTE = `<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
@@ -89,7 +95,7 @@ ${lab('FIXO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('GOLE
     const t = T()[p.type];
     return `<div class="skl-card cb">
   <div class="cb-in">
-    <div class="cb-head"><div class="cb-no">${esc(p.number)}</div><div class="cb-name">${bigName(p)}</div><div class="cb-club">SK LIKER FUTSAL CLUB<br>${season(meta)} SEASON CLOSING</div></div>
+    <div class="cb-head"><div class="cb-no">${esc(p.number)}</div><div class="cb-name">${bigName(p)}</div><div class="cb-club">SK LIKER FUTSAL CLUB<br>${season(meta)} SEASON CLOSING</div>${emblem(meta, 'cb-logo')}</div>
     <div class="cb-body">
       <div class="cb-box">
         <div class="cb-k">01  TYPE</div>
@@ -163,5 +169,5 @@ ${lab('FIXO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('GOLE
     return g.join('');
   }
 
-  window.SKLView = { esc, disp, emblem, avatar, cardFront, cardBack, mapSVG, LIME };
+  window.SKLView = { esc, disp, emblem, avatar, cardFront, cardBack, mapSVG, LIME, LOGO };
 })();

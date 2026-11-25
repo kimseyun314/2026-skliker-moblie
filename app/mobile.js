@@ -159,6 +159,7 @@
   intro.className = 'pack';
   intro.innerHTML = `<div class="pack-a"></div><div class="pack-b"></div>
     <div class="pack-in">
+      ${emblem(meta, 'pack-logo')}
       <div class="pack-k">SK LIKER · ${season} SEASON CLOSING</div>
       <div class="pack-no">${esc(me.number)}</div>
       <div class="pack-name">${esc(me.nickname)}</div>

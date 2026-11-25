@@ -46,7 +46,7 @@ body { overscroll-behavior: none; overflow: hidden; }
 /* 위쪽 전광판 띠 */
 .tick { display: flex; align-items: center; gap: 10px; }
 .tick-em { width: 40px; height: 40px; border-radius: 50%; background: var(--ink-2); border: 2px solid var(--lime); display: flex; align-items: center; justify-content: center; flex: none; }
-.tick-em .skl-emblem { transform: scale(.36); }
+.tick-em { padding: 2px; overflow: hidden; }
 .tick-band { flex: 1; min-width: 0; overflow: hidden; background: var(--lime); color: #111; transform: skewX(-16deg); height: 26px; display: flex; align-items: center; }
 .tick-run { display: flex; align-items: center; gap: 12px; white-space: nowrap; font-family: var(--label); font-weight: 700; font-size: 12.5px; letter-spacing: 2px; padding-left: 12px; animation: run 16s linear infinite; transform: skewX(16deg); }
 .tick-run i { font-style: normal; font-size: 10px; }
@@ -346,3 +346,4 @@ body { overscroll-behavior: none; overflow: hidden; }
 .op.mine b { color: var(--lime, #E4F218); }
 .ops + .vst { margin-top: 30px; }
 .coach-head .teamname, .coach-head .phead-k { color: #111; }
+.pack-logo { width: 96px; height: 96px; margin: 0 auto 14px; display: block; }

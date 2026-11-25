@@ -9,10 +9,7 @@
 .chrome { background-color: #E7E9ED; background-image: repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 26px, rgba(255,255,255,.6) 26px 29px, rgba(0,0,0,.03) 29px 56px); }
 
 /* 엠블럼 */
-.skl-emblem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1; }
-.skl-emblem b { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1.5px; color: #fff; }
-.skl-emblem i { font-style: normal; font-family: 'Anton', sans-serif; font-size: 36px; color: #E4F218; }
-.skl-emblem small { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 9px; letter-spacing: 1px; color: #BDBDBD; }
+.skl-emblem { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: contain; user-select: none; }
 
 /* 앞면 */
 .cf-lime { position: absolute; left: 0; right: 0; top: 0; height: 648px; background: #E4F218; clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%); }
@@ -24,7 +21,7 @@
 .cf-type { left: 22px; flex-direction: column; gap: 2px; }
 .cf-type small { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: 2px; color: #8A8A8A; }
 .cf-type b { font-size: 22px; font-weight: 900; color: #E4F218; letter-spacing: -.5px; }
-.cf-emb { right: 22px; box-shadow: inset 0 0 0 6px #111, inset 0 0 0 7px #5A5A5A; }
+.cf-emb { right: 22px; padding: 4px; overflow: hidden; }
 .cf-numwrap { position: absolute; right: 22px; top: 525px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
 .cf-num { position: relative; text-align: center; filter: drop-shadow(0 16px 22px rgba(0,0,0,.5)); font-family: 'Anton', sans-serif; font-size: 260px; line-height: .88; letter-spacing: -4px; }
 .cf-num .sh { position: absolute; left: 0; right: 0; top: 2px; color: #8E9800; text-shadow: 0 1px 0 #A3AE00, 0 2px 0 #9CA700, 0 3px 0 #95A000, 0 4px 0 #8E9800, 0 5px 0 #879100, 0 6px 0 #7F8800; }
@@ -75,3 +72,4 @@
 .cb-moment { font-size: 19px; font-weight: 700; line-height: 1.45; min-height: 27px; }
 .cb-qr { width: 76px; height: 76px; flex-shrink: 0; border: 3px solid #E4F218; background: #fff; image-rendering: pixelated; }
 .skl-card .ko, .ko { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; letter-spacing: -.03em; }
+.cb-logo { width: 46px; height: 46px; flex: none; }
