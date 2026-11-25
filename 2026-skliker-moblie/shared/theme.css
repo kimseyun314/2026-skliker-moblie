@@ -26,3 +26,6 @@ button { font-family: inherit; cursor: pointer; }
 .skl-av b { font-family: var(--display); font-weight: 400; line-height: 1; color: var(--lime); }
 
 .skl-loading, .skl-error { padding: 40px 24px; text-align: center; color: var(--mute); }
+
+/* 사진 아바타: 얼굴이 보이게 위쪽 기준으로 확대 */
+.skl-av[style*="background-image"] { background-size: 165% auto; background-position: 50% 4%; background-color: #3A3A3A; }

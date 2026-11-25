@@ -13,7 +13,7 @@
   const BASE = (() => {
     try { return new URL('../', (document.currentScript && document.currentScript.src) || location.href).href; } catch (e) { return ''; }
   })();
-  const LOGO = BASE + 'assets/logo.png';
+  const LOGO = (typeof window !== 'undefined' && window.SKL_LOGO) || BASE + 'assets/logo.png'; // 슬라이드처럼 파일 하나로 쓸 때는 SKL_LOGO(data URI)
   /** 미리 만든 QR 이미지 (qr/ID.png). 파일이 없으면 화면에서 바로 만들어요 */
   const qrFile = (id) => BASE + 'qr/' + encodeURIComponent(id) + '.png';
 
@@ -33,7 +33,7 @@
 
   /** 디스플레이 서체(Anton)에는 한글이 없어서, 한글 부분만 굵은 고딕으로 감싸요 */
   const disp = (s) => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:\s+[\u3131-\u318E\uAC00-\uD7A3]+)*)/g, '<span class="ko">$1</span>');
-  const bigName = (p) => disp(p.nameEn || p.nickname);
+  const bigName = (p) => disp(p.cardName || p.nameEn || p.nickname); // cardName: 진행 슬라이드에서만 넣는 실명
   const subName = (p) => (p.nameEn ? esc(p.nickname) : '');
   const season = (meta) => esc((meta && meta.season) || 2026);
 
