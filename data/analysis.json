@@ -1,7 +1,14 @@
 {
-  "generatedAt": "2026-11-25T04:49:29.822Z",
+  "generatedAt": "2026-11-25T05:08:33.444Z",
   "count": 16,
-  "fieldCount": 16,
+  "fieldCount": 15,
+  "coaches": [
+    {
+      "id": "6zvngg",
+      "nickname": "호랑이",
+      "type": "GOLEIRO"
+    }
+  ],
   "axes": {
     "x": "도전(Q1~Q6) ↔ 준비",
     "y": "주도(Q7~Q12) ↔ 함께"
@@ -100,76 +107,105 @@
       "index": 0,
       "name": "산타 FC",
       "color": "#E63946",
-      "size": 8,
-      "field": 8,
+      "size": 5,
+      "field": 5,
       "roles": {
         "GOLEIRO": 1,
-        "FIXO": 2,
-        "ALA": 3,
-        "PIVO": 2,
+        "FIXO": 1,
+        "ALA": 2,
+        "PIVO": 1,
         "CHEER": 0
       },
       "types": {
-        "PIVO": 2,
-        "ALA": 3,
-        "FIXO": 2,
+        "PIVO": 1,
+        "ALA": 2,
+        "FIXO": 1,
         "GOLEIRO": 1
       },
-      "avgChallenge": 9.4,
-      "avgLead": 11.8,
+      "avgChallenge": 8,
+      "avgLead": 11,
       "ability": {
-        "PIVO": 68.6,
-        "ALA": 69.3,
-        "FIXO": 68.9,
-        "GOLEIRO": 66.8
+        "PIVO": 66.6,
+        "ALA": 67.6,
+        "FIXO": 69.2,
+        "GOLEIRO": 71.2
       },
       "members": [
         "a2qwaa",
         "fdt5ux",
-        "2mt67v",
-        "9csqcw",
+        "yc8x9y",
         "vat2m5",
-        "3ywtwy",
-        "3trhcb",
-        "nsqbge"
+        "3trhcb"
       ]
     },
     {
       "index": 1,
       "name": "루돌프 FC",
       "color": "#C8853F",
-      "size": 8,
-      "field": 8,
+      "size": 5,
+      "field": 5,
       "roles": {
         "GOLEIRO": 1,
         "FIXO": 2,
-        "ALA": 3,
-        "PIVO": 2,
+        "ALA": 1,
+        "PIVO": 1,
         "CHEER": 0
       },
       "types": {
         "PIVO": 1,
         "ALA": 1,
-        "FIXO": 3,
-        "GOLEIRO": 3
+        "FIXO": 2,
+        "GOLEIRO": 1
       },
-      "avgChallenge": 8.4,
-      "avgLead": 10.9,
+      "avgChallenge": 9.2,
+      "avgLead": 12,
       "ability": {
-        "PIVO": 66.8,
-        "ALA": 69.4,
-        "FIXO": 69.1,
-        "GOLEIRO": 70.6
+        "PIVO": 69,
+        "ALA": 68.8,
+        "FIXO": 69.8,
+        "GOLEIRO": 66.8
       },
       "members": [
         "x5pr8v",
-        "yc8x9y",
         "jeuapq",
         "p7qm4h",
         "mdbg5j",
+        "2mt67v"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "눈사람 FC",
+      "color": "#4EA8DE",
+      "size": 5,
+      "field": 5,
+      "roles": {
+        "GOLEIRO": 1,
+        "FIXO": 2,
+        "ALA": 1,
+        "PIVO": 1,
+        "CHEER": 0
+      },
+      "types": {
+        "PIVO": 1,
+        "ALA": 1,
+        "FIXO": 2,
+        "GOLEIRO": 1
+      },
+      "avgChallenge": 9.4,
+      "avgLead": 11.2,
+      "ability": {
+        "PIVO": 67.6,
+        "ALA": 71,
+        "FIXO": 68.4,
+        "GOLEIRO": 67.4
+      },
+      "members": [
         "g8ytyp",
-        "dt347d",
-        "6zvngg"
+        "9csqcw",
+        "3ywtwy",
+        "nsqbge",
+        "dt347d"
       ]
     }
   ],
@@ -229,7 +265,7 @@
       "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
       "team": 1,
       "teamName": "루돌프 FC",
-      "role": "PIVO",
+      "role": "FIXO",
       "play": "full",
       "gk": "ok",
       "valid": true
@@ -287,8 +323,8 @@
       "best": "FIXO",
       "ability": "설계력",
       "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
-      "team": 1,
-      "teamName": "루돌프 FC",
+      "team": 0,
+      "teamName": "산타 FC",
       "role": "FIXO",
       "play": "full",
       "gk": "ok",
@@ -407,8 +443,8 @@
       "best": "FIXO",
       "ability": "설계력",
       "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
-      "team": 0,
-      "teamName": "산타 FC",
+      "team": 1,
+      "teamName": "루돌프 FC",
       "role": "FIXO",
       "play": "full",
       "gk": "ok",
@@ -437,8 +473,8 @@
       "best": "FIXO",
       "ability": "설계력",
       "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
-      "team": 1,
-      "teamName": "루돌프 FC",
+      "team": 2,
+      "teamName": "눈사람 FC",
       "role": "FIXO",
       "play": "full",
       "gk": "ok",
@@ -467,8 +503,8 @@
       "best": "ALA",
       "ability": "활동력",
       "line": "먼저 뛰어들고, 같이 웃는 사람",
-      "team": 0,
-      "teamName": "산타 FC",
+      "team": 2,
+      "teamName": "눈사람 FC",
       "role": "ALA",
       "play": "full",
       "gk": "ok",
@@ -527,8 +563,8 @@
       "best": "PIVO",
       "ability": "결정력",
       "line": "결정적인 순간, 공을 받고 싶어하는 사람",
-      "team": 0,
-      "teamName": "산타 FC",
+      "team": 2,
+      "teamName": "눈사람 FC",
       "role": "PIVO",
       "play": "full",
       "gk": "ok",
@@ -587,8 +623,8 @@
       "best": "FIXO",
       "ability": "설계력",
       "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
-      "team": 0,
-      "teamName": "산타 FC",
+      "team": 2,
+      "teamName": "눈사람 FC",
       "role": "FIXO",
       "play": "full",
       "gk": "ok",
@@ -617,9 +653,9 @@
       "best": "GOLEIRO",
       "ability": "수호력",
       "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
-      "team": 1,
-      "teamName": "루돌프 FC",
-      "role": "ALA",
+      "team": 2,
+      "teamName": "눈사람 FC",
+      "role": "GOLEIRO",
       "play": "full",
       "gk": "ok",
       "valid": true
@@ -647,9 +683,9 @@
       "best": "GOLEIRO",
       "ability": "수호력",
       "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
-      "team": 1,
-      "teamName": "루돌프 FC",
-      "role": "ALA",
+      "team": null,
+      "teamName": "",
+      "role": "COACH",
       "play": "full",
       "gk": "ok",
       "valid": true

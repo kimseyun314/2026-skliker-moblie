@@ -99,9 +99,12 @@
     <div class="sheet"><div class="sh1"><span class="tg">${me.type}</span>${esc(me.nickname)}<span class="m">도전 <b>${me.x}</b> · 주도 <b>${me.y}</b> <small>/18</small></span></div>${nearMsg}</div>
   </section>`;
 
-  /* ---------- 3. 우리 팀 ---------- */
+  /* ---------- 3. 우리 팀 (코치는 팀 밖에 따로) ---------- */
+  const isCoach = (p) => p.role === 'COACH';
+  const coaches = players.filter(isCoach);
   const SLOTS = { PIVO: [[50, 14], [30, 16], [70, 16]], ALA: [[18, 40], [82, 40], [50, 32]], FIXO: [[50, 62], [30, 64], [70, 64]], GOLEIRO: [[50, 87], [35, 87]] };
-  const mates = players.filter((p) => p.team === me.team);
+  const iAmCoach = isCoach(me);
+  const mates = iAmCoach ? [] : players.filter((p) => !isCoach(p) && p.team === me.team);
   const used = {};
   const field = mates.filter((p) => p.role !== 'CHEER');
   const marks = field.map((p, n) => {
@@ -112,14 +115,22 @@
     return `<div class="pl${isMe ? ' me' : ''}" style="left:${x}%;top:${y}%;--c:${TYPES[p.type].color};--i:${n}"><div class="pl-up">${avatar(p)}<div class="pn">${esc(p.nickname)}</div><div class="pt">${p.role}</div></div><div class="pl-sh"></div></div>`;
   }).join('');
   const cheers = mates.filter((p) => p.role === 'CHEER');
-  const others = teams.map((tm, ti) => ({ tm, ti })).filter((o) => o.ti !== me.team);
-  const oppHtml = others.map(({ tm, ti }) => {
-    const list = players.filter((p) => p.team === ti).map((q, n) => `<div class="op" style="--c:${TYPES[q.type].color};--i:${n}"><span class="no">${esc(q.number)}</span><b>${esc(q.nickname)}</b><span class="rl">${q.role === 'CHEER' ? 'CHEER' : q.role}</span></div>`).join('');
-    return `<div class="vst"><em>VS</em><span style="color:${tm.color}">${disp(tm.name)}</span></div><div class="ops">${list}</div>`;
-  }).join('');
-  const myRole = me.role === 'CHEER' ? '응원 담당' : `${TYPES[me.role].ko}(${me.role})`;
-  const tc = team ? team.color : '#ffffff';
-  const p3 = `<section class="panel" data-i="2" style="--tc:${tc}">
+  const rosterOf = (ti) => players.filter((p) => !isCoach(p) && p.team === ti)
+    .map((q, n) => `<div class="op${q.id === me.id ? ' mine' : ''}" style="--c:${TYPES[q.type].color};--i:${n}"><span class="no">${esc(q.number)}</span><b>${esc(q.nickname)}</b><span class="rl">${q.role === 'CHEER' ? 'CHEER' : q.role}</span></div>`).join('');
+  const others = teams.map((tm, ti) => ({ tm, ti })).filter((o) => iAmCoach || o.ti !== me.team);
+  const oppHtml = others.map(({ tm, ti }) => `<div class="vst">${iAmCoach ? '' : '<em>VS</em>'}<span style="color:${tm.color}">${disp(tm.name)}</span></div><div class="ops">${rosterOf(ti)}</div>`).join('');
+  const coachHtml = coaches.length ? `<div class="coachbox"><div class="ck">COACH</div>${coaches.map((c) => `<div class="cc${c.id === me.id ? ' mine' : ''}">${avatar(c)}<div><b>${esc(c.nickname)}</b><small>${c.id === me.id ? '오늘은 세 팀 모두의 코치' : '오늘의 코치님 · 모든 팀을 응원해요'}</small></div><span class="no">${esc(c.number)}</span></div>`).join('')}</div>` : '';
+  const myRole = iAmCoach ? '코치' : me.role === 'CHEER' ? '응원 담당' : `${TYPES[me.role].ko}(${me.role})`;
+  const tc = iAmCoach ? '#E4F218' : team ? team.color : '#ffffff';
+  const p3 = iAmCoach ? `<section class="panel" data-i="2" style="--tc:${tc}">
+    ${ghost('COACH')}
+    ${ticker(3, ['COACH', `${teams.length} TEAMS`, `${players.filter((p) => !isCoach(p)).length} PLAYERS`, 'MATCH DAY'])}
+    <div class="tblock coach-head"><div class="phead-k"><b>03</b>MY ROLE</div><div class="teamname">${disp('COACH')}</div>${badge('COACH ✦ ' + season + ' ✦ MATCH DAY ✦ ', teams.length + '<small>팀</small>')}</div>
+    <div class="hs">오늘은 <b>코치</b>예요 · 세 팀 모두를 지켜봐 주세요</div>
+    ${coachHtml}
+    ${marquee('MATCH DAY')}
+    <div class="vs">${oppHtml}</div>
+  </section>` : `<section class="panel" data-i="2" style="--tc:${tc}">
     ${ghost('TEAM')}
     ${ticker(3, ['STARTING LINEUP', esc(team ? team.name : 'TEAM'), `${field.length} PLAYERS`, `MY ROLE ${me.role}`])}
     <div class="tblock"><div class="phead-k"><b>03</b>MY TEAM</div><div class="teamname">${disp(team ? team.name : '팀 미정')}</div>${badge('STARTING LINEUP ✦ ' + season + ' ✦ MATCH DAY ✦ ', field.length + '<small>명</small>')}</div>
@@ -129,6 +140,7 @@
     <div class="note"><div class="ic">!</div><div><b>미션카드는 전반전에 획득</b><p>미니게임에서 이기면 후반전에 쓸 초능력 카드를 고를 수 있어요</p></div></div>
     ${marquee('MATCH DAY')}
     <div class="vs">${oppHtml}</div>
+    ${coachHtml}
   </section>`;
 
   app.innerHTML = `<div class="pager" id="pager">${p1}${p2}${p3}</div><div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>`;
@@ -158,7 +170,7 @@
     const el = $('#legend');
     el.classList.toggle('team', mode === 'team');
     el.innerHTML = mode === 'team'
-      ? teams.map((tm, i) => `<span style="--c:${tm.color}">${esc(tm.name)}<b>${players.filter((p) => p.team === i).length}</b></span>`).join('')
+      ? teams.map((tm, i) => `<span style="--c:${tm.color}">${esc(tm.name)}<b>${players.filter((p) => p.team === i && p.role !== 'COACH').length}</b></span>`).join('') + (players.some((p) => p.role === 'COACH') ? `<span style="--c:#ffffff">코치<b>${players.filter((p) => p.role === 'COACH').length}</b></span>` : '')
       : TYPE_ORDER.map((k) => `<span style="--c:${TYPES[k].color}" class="${k === me.type ? 'mine' : ''}">${TYPES[k].ko}<b>${counts[k] || 0}</b></span>`).join('');
   }
   legend('type');

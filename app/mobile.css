@@ -333,3 +333,16 @@ body { overscroll-behavior: none; overflow: hidden; }
 .scanner .frame { width: 260px; height: 260px; border: 0; }
 .scanner .frame .c { width: 46px; height: 46px; }
 .scan-k { position: absolute; top: calc(50% - 180px); left: 0; right: 0; text-align: center; font-family: var(--label); font-weight: 700; font-size: 16px; letter-spacing: 5px; color: var(--lime); }
+
+/* 코치 (팀 화면 하단 / 코치 본인 화면) */
+.coachbox { margin-top: 26px; border: 1px solid var(--line); padding: 14px 14px 10px; position: relative; }
+.coachbox .ck { position: absolute; top: -11px; left: 12px; background: #fff; color: #111; font-family: var(--display); font-size: 14px; letter-spacing: 2px; padding: 2px 10px; transform: skewX(-12deg); }
+.coachbox .cc { display: flex; align-items: center; gap: 12px; padding: 6px 0; }
+.coachbox .cc .skl-av { width: 44px; height: 44px; flex: none; }
+.coachbox .cc b { display: block; font-size: 17px; font-weight: 900; }
+.coachbox .cc small { color: var(--mute); font-size: 12.5px; }
+.coachbox .cc .no { margin-left: auto; font-family: var(--display); font-size: 26px; color: var(--mute); }
+.coachbox .cc.mine b { color: var(--lime, #E4F218); }
+.op.mine b { color: var(--lime, #E4F218); }
+.ops + .vst { margin-top: 30px; }
+.coach-head .teamname, .coach-head .phead-k { color: #111; }

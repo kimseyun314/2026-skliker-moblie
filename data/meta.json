@@ -3,7 +3,7 @@
   "season": 2026,
   "event": "시즌 클로징 데이",
   "eventEn": "SEASON CLOSING DAY",
-  "teamCount": 2,
+  "teamCount": 3,
   "teams": [
     {
       "name": "산타 FC",
@@ -12,12 +12,19 @@
     {
       "name": "루돌프 FC",
       "color": "#C8853F"
+    },
+    {
+      "name": "눈사람 FC",
+      "color": "#4EA8DE"
     }
   ],
   "mobileUrl": "",
   "medBold": 9,
   "medSolve": 11.5,
   "sharedNumbers": [
+    "호랑이"
+  ],
+  "coaches": [
     "호랑이"
   ]
 }

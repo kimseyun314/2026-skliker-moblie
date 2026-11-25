@@ -134,83 +134,57 @@
     return Object.assign({}, p, { x, y, valid, type, subtype, tags: tagsOf(a, type), aff, best: bestOf(aff, type), role: p.role || type });
   }
 
-  // 한 팀 포지션 우선순위 (5명 = GK, 픽소, 아라, 피보, 아라)
-  const ROLE_SEQ = ['GOLEIRO', 'FIXO', 'ALA', 'PIVO', 'ALA', 'FIXO', 'PIVO', 'ALA'];
-
   /**
-   * 팀 자동 배정
-   * players: [{id, answers, gk:'yes'|'ok'|'no', play:'full'|'half'|'cheer', exp:0|1|2}]
-   * 반환: { [id]: { team: 0..T-1, role: 'PIVO'|'ALA'|'FIXO'|'GOLEIRO'|'CHEER' } }
+   * 팀 자동 배정 — 유형(포지션)이 팀마다 골고루 섞이게
+   * players: [{id, answers, role?, gk:'yes'|'ok'|'no', play:'full'|'half'|'cheer', exp:0|1|2}]
+   *  - role 'COACH'는 팀에 넣지 않아요 (결과: team 없음, role 'COACH')
+   *  - play 'cheer'는 응원 담당으로 인원이 적은 팀부터
+   * 순서: 골레이로 → 피보 → 아라 → 픽소 유형별로, 그 유형이 가장 적은 팀 → 인원이 적은 팀 →
+   *       구력 합이 낮은 팀 → 도전·주도 평균이 전체 평균에서 덜 벗어나는 팀에 넣어요.
+   *       당일 포지션 = 성향 유형. 골레이로 유형이 없는 팀은 골키퍼 적합도가 가장 높은 사람이 GK를 맡아요.
+   * 반환: { [id]: { team: 0..T-1 | undefined, role } }
    */
   function assignTeams(players, teamCount, med) {
     const list = players.map((p) => enrich(p, med));
-    const field = list.filter((p) => p.play !== 'cheer');
-    const cheer = list.filter((p) => p.play === 'cheer');
-    const T = Math.max(2, teamCount || Math.round(field.length / 5) || 2);
-    const perTeam = Math.ceil(field.length / T);
-
-    // 1) 포지션 슬롯 만들기
-    let slots = [];
-    for (let k = 0; k < perTeam; k++) {
-      const role = ROLE_SEQ[k % ROLE_SEQ.length];
-      for (let t = 0; t < T; t++) slots.push({ role, team: t, k });
-    }
-    // 인원보다 슬롯이 많으면 우선순위 낮은 슬롯부터 제거
-    slots.sort((a, b) => a.k - b.k || a.team - b.team);
-    slots = slots.slice(0, field.length);
-
-    const need = {};
-    slots.forEach((s) => { need[s.role] = (need[s.role] || 0) + 1; });
-
-    // 2) 적합도가 높은 순서로 선수-포지션 매칭 (골키퍼 기피 반영)
-    const pairs = [];
-    for (const p of field) {
-      for (const role of Object.keys(need)) {
-        let score = p.aff[role] + (p.type === role ? 15 : 0);
-        if (role === 'GOLEIRO') {
-          if (p.gk === 'no') score -= 1000;
-          else if (p.gk === 'ok') score -= 10;
-          else if (p.gk === 'yes') score += 10;
-        }
-        pairs.push({ p, role, score });
-      }
-    }
-    pairs.sort((a, b) => b.score - a.score || String(a.p.id).localeCompare(String(b.p.id)));
-    const roleOf = {};
-    const left = Object.assign({}, need);
-    for (const { p, role } of pairs) {
-      if (roleOf[p.id] || !left[role]) continue;
-      roleOf[p.id] = role; left[role]--;
-    }
-
-    // 3) 포지션별로 팀에 분배 (구력 합이 비슷해지도록)
-    const capacity = Array.from({ length: T }, () => ({}));
-    slots.forEach((s) => { capacity[s.team][s.role] = (capacity[s.team][s.role] || 0) + 1; });
-    const teamExp = new Array(T).fill(0);
-    const teamSize = new Array(T).fill(0);
     const result = {};
-    const roleOrder = ['GOLEIRO', 'FIXO', 'PIVO', 'ALA'];
-    for (const role of roleOrder) {
-      const members = field
-        .filter((p) => roleOf[p.id] === role)
-        .sort((a, b) => (b.exp || 0) - (a.exp || 0) || b.aff[role] - a.aff[role]);
-      for (const p of members) {
-        let best = -1;
-        for (let t = 0; t < T; t++) {
-          if (!capacity[t][role]) continue;
-          if (best < 0 || teamExp[t] < teamExp[best] || (teamExp[t] === teamExp[best] && teamSize[t] < teamSize[best])) best = t;
+    list.filter((p) => String(p.role || '').toUpperCase() === 'COACH').forEach((p) => { result[p.id] = { team: undefined, role: 'COACH' }; });
+    const pool = list.filter((p) => !result[p.id]);
+    const field = pool.filter((p) => p.play !== 'cheer');
+    const cheer = pool.filter((p) => p.play === 'cheer');
+    const T = Math.max(2, teamCount || Math.round(field.length / 5) || 2);
+    const teams = Array.from({ length: T }, () => ({ members: [], exp: 0, sx: 0, sy: 0 }));
+    const avgX = field.reduce((s, p) => s + p.x, 0) / (field.length || 1);
+    const avgY = field.reduce((s, p) => s + p.y, 0) / (field.length || 1);
+    const drift = (t, p) => {
+      const n = t.members.length + 1;
+      return Math.abs((t.sx + p.x) / n - avgX) + Math.abs((t.sy + p.y) / n - avgY);
+    };
+    for (const type of ['GOLEIRO', 'PIVO', 'ALA', 'FIXO']) {
+      const group = field.filter((p) => p.type === type)
+        .sort((a, b) => b.aff[type] - a.aff[type] || String(a.id).localeCompare(String(b.id)));
+      for (const p of group) {
+        let best = 0;
+        const cnt = (t) => t.members.filter((q) => q.type === type).length;
+        for (let i = 1; i < T; i++) {
+          const a = teams[i], b = teams[best];
+          const key = [cnt(a) - cnt(b), a.members.length - b.members.length, a.exp - b.exp, drift(a, p) - drift(b, p)];
+          const d = key.find((v) => Math.abs(v) > 1e-9);
+          if (d !== undefined && d < 0) best = i;
         }
-        capacity[best][role]--;
-        teamExp[best] += p.exp || 0;
-        teamSize[best]++;
-        result[p.id] = { team: best, role };
+        const t = teams[best];
+        t.members.push(p); t.exp += p.exp || 0; t.sx += p.x; t.sy += p.y;
+        result[p.id] = { team: best, role: type };
       }
     }
-    // 4) 응원 담당은 인원이 적은 팀부터
+    teams.forEach((t, i) => {
+      if (!t.members.length || t.members.some((p) => result[p.id].role === 'GOLEIRO')) return;
+      const cand = t.members.filter((p) => p.gk !== 'no').sort((a, b) => b.aff.GOLEIRO - a.aff.GOLEIRO)[0] || t.members[0];
+      result[cand.id] = { team: i, role: 'GOLEIRO' };
+    });
     for (const p of cheer) {
       let best = 0;
-      for (let t = 1; t < T; t++) if (teamSize[t] < teamSize[best]) best = t;
-      teamSize[best]++;
+      for (let t = 1; t < T; t++) if (teams[t].members.length < teams[best].members.length) best = t;
+      teams[best].members.push(p);
       result[p.id] = { team: best, role: 'CHEER' };
     }
     return result;

@@ -9,7 +9,7 @@
     $('#pages').innerHTML = `<div class="skl-error">${esc(e.message)}</div>`; return;
   }
   const { meta, players, teams } = D;
-  const list = players.slice().sort((a, b) => (a.team - b.team) || (a.number - b.number));
+  const list = players.slice().sort((a, b) => ((a.team ?? 99) - (b.team ?? 99)) || (a.number - b.number));
   const qr = {};
   list.forEach((p) => { qr[p.id] = SKLQR.dataUrl(SKL.qrUrl(meta, p.id), 360); });
   $('#info').textContent = `${list.length}명 · QR 주소 ${meta.mobileUrl}`;

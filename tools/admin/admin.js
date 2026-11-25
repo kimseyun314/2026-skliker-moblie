@@ -92,7 +92,7 @@
   });
 
   /* ---------- ② 선수 표 ---------- */
-  const ROLE_OPTS = ['PIVO', 'ALA', 'FIXO', 'GOLEIRO', 'CHEER'];
+  const ROLE_OPTS = ['PIVO', 'ALA', 'FIXO', 'GOLEIRO', 'CHEER', 'COACH'];
   const PLAY_KO = { full: '풀타임', half: '절반', cheer: '응원' };
   function renderPlayers() {
     const teams = SKL.teamsOf(state.meta);

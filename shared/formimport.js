@@ -231,6 +231,8 @@
     const o = opts || {};
     const m = Object.assign({}, meta || {});
     const list = players.filter((p) => p.nickname);
+    const isCoach = (p) => (m.coaches || []).some((n) => squash(n) === squash(p.nickname));
+    list.forEach((p) => { if (isCoach(p)) { p.role = 'COACH'; p.team = ''; } else if (p.role === 'COACH') p.role = ''; });
     const sc = list.map((p) => SKL.scores(p.answers)).filter((s) => s.valid);
     if (!o.fixedMedian && sc.length) {
       m.medBold = SKL.median(sc.map((s) => s.x));
@@ -239,11 +241,11 @@
     const med = SKL.medians(m);
     const teams = SKL.teamsOf(m);
 
-    const allSet = list.every((p) => p.team !== '' && p.team != null && p.role);
+    const allSet = list.every((p) => p.role === 'COACH' || (p.team !== '' && p.team != null && p.role));
     let assigned = null;
     if (!(o.keepTeams && allSet)) assigned = SKL.assignTeams(list, m.teamCount, med);
     list.forEach((p) => {
-      if (assigned && assigned[p.id]) { p.team = assigned[p.id].team; p.role = assigned[p.id].role; }
+      if (assigned && assigned[p.id]) { p.team = assigned[p.id].team === undefined ? '' : assigned[p.id].team; p.role = assigned[p.id].role; }
     });
     const resolved = SKL.resolveTeams(list, m);
 
@@ -266,7 +268,7 @@
     const avg = (a) => (a.length ? Math.round(a.reduce((s, v) => s + v, 0) / a.length * 10) / 10 : 0);
     const teamSummary = teams.map((t, i) => {
       const mem = rows.filter((r) => r.team === i);
-      const field = mem.filter((r) => r.role !== 'CHEER');
+      const field = mem.filter((r) => r.role !== 'CHEER' && r.role !== 'COACH');
       const roles = {};
       ['GOLEIRO', 'FIXO', 'ALA', 'PIVO', 'CHEER'].forEach((k) => { roles[k] = mem.filter((r) => r.role === k).length; });
       const types = {};
@@ -291,7 +293,8 @@
       players: list,
       report: {
         generatedAt: new Date().toISOString(),
-        count: rows.length, fieldCount: rows.filter((r) => r.role !== 'CHEER').length,
+        count: rows.length, fieldCount: rows.filter((r) => r.role !== 'CHEER' && r.role !== 'COACH').length,
+        coaches: rows.filter((r) => r.role === 'COACH').map((r) => ({ id: r.id, nickname: r.nickname, type: r.type })),
         axes: { x: '도전(Q1~Q6) ↔ 준비', y: '주도(Q7~Q12) ↔ 함께' },
         median: { challenge: med.mx, lead: med.my, source: o.fixedMedian ? 'meta.json' : 'participants' },
         typeCount,
@@ -318,7 +321,7 @@
     const L = [];
     L.push(`# SK라이커 성향 검사 분석 리포트`, '', `> 운영진용 · 실명과 구력이 들어 있어요. 저장소에 올리지 마세요.  `, `> 생성: ${R.generatedAt.replace('T', ' ').slice(0, 16)} (UTC)`, '');
     L.push('## 요약', '');
-    L.push(`- 응답 ${R.count}명 (필드 ${R.fieldCount}명, 응원·진행 ${R.count - R.fieldCount}명)`);
+    L.push(`- 응답 ${R.count}명 (필드 ${R.fieldCount}명${R.coaches.length ? `, 코치 ${R.coaches.map((c) => c.nickname).join(', ')}` : ''})`);
     if (c.log) L.push(`- 새로 등록 ${c.log.added.length}명 · 업데이트 ${c.log.updated.length}명 · 설문 없이 유지 ${c.log.kept.length}명 · 남은 빈 QR ${c.pending || 0}개`);
     L.push(`- 기준선(중앙값): 도전 **${R.median.challenge}** · 주도 **${R.median.lead}** ${R.median.source === 'participants' ? '(참가자 중앙값으로 계산)' : '(meta.json 고정값)'}`);
     L.push(`- 유형 분포: ${SKL.TYPE_ORDER.map((t) => `${SKL.TYPES[t].ko}(${SKL.TYPES[t].nick}) ${R.typeCount[t]}명`).join(' · ')}`, '');
