@@ -23,6 +23,7 @@ shared/               공통 로직 (유형 계산·팀 배정·QR·카드 디�
 vendor/               QR 생성(qrcode-generator, MIT) · QR 인식(jsQR, Apache-2.0)
 tools/admin/          관리 도구 (선수 입력, 구글폼 붙여넣기, 팀 자동 배정, QR 생성, players.csv 만들기)
 tools/cards/          선수카드 인쇄 (63×88mm, A4 9장, 양면)
+tools/import/         구글폼 응답 CSV → players.csv · meta.json · analysis.json (node로 실행)
 ```
 
 `tools/`는 운영진용 보조 도구예요. 지워도 모바일 화면에는 영향이 없어요.
@@ -39,7 +40,8 @@ tools/cards/          선수카드 인쇄 (63×88mm, A4 9장, 양면)
 
 ## 준비 순서
 
-1. `data/players.csv`를 엑셀·구글시트로 열어 ID 옆 칸을 채우고 저장해서 올리기 → [DATA_GUIDE.md](DATA_GUIDE.md)
+1. 설문 응답 넣기: `node tools/import/form2players.js 응답.csv` → [DATA_GUIDE.md](DATA_GUIDE.md) 0번
+   (손으로 고칠 땐 `data/players.csv`를 엑셀·구글시트로 열어 ID 옆 칸을 채우고 저장해서 올리기 → [DATA_GUIDE.md](DATA_GUIDE.md)
    (또는 `tools/admin/`에서 입력 후 "players.csv 다운로드"로 덮어쓰기)
 2. `tools/admin/` ③에서 선수별 QR 확인·이미지 저장
 3. `tools/cards/`에서 선수카드 인쇄 (QR 포함)

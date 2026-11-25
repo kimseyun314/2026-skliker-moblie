@@ -186,7 +186,7 @@
   function preview() {
     const { s, missing } = readAnswers();
     const e = SKL.enrich({ answers: s }, SKL.medians(state.meta));
-    $('#typePreview').innerHTML = `<span class="badge" style="--c:${TYPES[e.type].color}">${e.type}</span>${esc(e.subtype)} · 과감 ${e.x}/18 · 해결 ${e.y}/18${missing ? ` <small class="warn">(${missing}문항 미응답 → 3으로 계산)</small>` : ''}`;
+    $('#typePreview').innerHTML = `<span class="badge" style="--c:${TYPES[e.type].color}">${e.type}</span>${esc(e.subtype)} · 도전 ${e.x}/18 · 주도 ${e.y}/18${missing ? ` <small class="warn">(${missing}문항 미응답 → 3으로 계산)</small>` : ''}`;
   }
   function showPhoto() {
     const el = $('#phPrev');
@@ -250,93 +250,48 @@
   /* ---------- 구글폼 붙여넣기 ---------- */
   $('#btnImport').addEventListener('click', () => { $('#importMsg').textContent = ''; $('#importModal').classList.add('show'); });
   $('#importCancel').addEventListener('click', () => $('#importModal').classList.remove('show'));
+  let lastImport = null;
   $('#importRun').addEventListener('click', () => {
     const msg = $('#importMsg');
     try {
       const r = importTable($('#importText').value);
-      msg.className = 'ghmsg ok';
-      msg.textContent = `새로 추가 ${r.added}명, 업데이트 ${r.updated}명. 팀 자동 배정을 다시 눌러주세요.`;
-      renderPlayers(); save('구글폼 응답을 가져왔어요');
+      lastImport = r;
+      msg.className = 'ghmsg ' + (r.warnings.length ? 'err' : 'ok');
+      msg.innerHTML = `새로 등록 ${r.log.added.length}명 · 업데이트 ${r.log.updated.length}명 · 남은 빈 QR ${r.pending}개<br>`
+        + `기준선 도전 ${r.meta.medBold} · 주도 ${r.meta.medSolve} · ` + SKL.TYPE_ORDER.map((t) => `${t} ${r.report.typeCount[t]}`).join(' · ')
+        + ' · 팀 배정 완료'
+        + (r.warnings.length ? '<br><b>확인할 것</b><br>' + r.warnings.map((w) => '· ' + esc(w)).join('<br>') : '');
+      $('#importReport').style.display = '';
+      renderMeta(); renderTeams(); renderPlayers(); save('구글폼 응답을 분석해서 넣었어요');
     } catch (e) {
       msg.className = 'ghmsg err'; msg.textContent = e.message;
     }
   });
-  function parseTable(text) {
-    const delim = text.includes('\t') ? '\t' : ',';
-    const rows = []; let row = [], cell = '', q = false;
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
-      if (q) {
-        if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
-        else if (ch === '"') q = false;
-        else cell += ch;
-      } else if (ch === '"' && cell === '') q = true;
-      else if (ch === delim) { row.push(cell); cell = ''; }
-      else if (ch === '\n' || ch === '\r') {
-        if (ch === '\r' && text[i + 1] === '\n') i++;
-        row.push(cell); cell = '';
-        if (row.some((c) => c.trim())) rows.push(row);
-        row = [];
-      } else cell += ch;
-    }
-    row.push(cell); if (row.some((c) => c.trim())) rows.push(row);
-    return rows;
-  }
+  $('#importReport').addEventListener('click', () => { if (lastImport) downloadText(lastImport.reportMd, `분석리포트_${stamp()}.md`); });
+
+  /** 구글폼 응답 → shared/formimport.js (Node 스크립트와 같은 로직) */
   function importTable(text) {
-    const rows = parseTable(text.trim());
-    if (rows.length < 2) throw new Error('제목 행과 응답 행이 모두 필요해요.');
-    const head = rows[0].map((h) => h.trim());
-    const col = (test) => head.findIndex(test);
-    const idx = {
-      name: col((h) => /^(Q\d+\.\s*)?이름/.test(h)),
-      nickname: col((h) => h.includes('닉네임')),
-      number: col((h) => h.includes('등번호')),
-      nameEn: col((h) => h.includes('영문')),
-      moment: col((h) => h.includes('최고의 순간')),
-      gk: col((h) => h.includes('골키퍼')),
-      play: col((h) => h.includes('뛸 수')),
-      exp: col((h) => h.includes('구력')),
-    };
-    // 문항 열 찾기: 제목에 태그 문구가 있으면 그 열, 아니면 1~4 숫자만 들어 있는 열 12개를 순서대로
-    let qIdx = QUESTIONS.map((q) => col((h) => h.includes(q[1].slice(1)) || h.includes(q[2].slice(1))));
-    if (qIdx.some((v) => v < 0)) {
-      const numeric = head.map((_, ci) => ci).filter((ci) => rows.slice(1).every((r) => /^\s*[1-4]\b/.test(String(r[ci] || ''))));
-      if (numeric.length >= 12) qIdx = numeric.slice(0, 12);
-    }
-    const missing = [];
-    if (idx.nickname < 0) missing.push('닉네임');
-    qIdx.forEach((v, i) => { if (v < 0) missing.push(`Q${i + QUESTION_OFFSET}`); });
-    if (missing.length) throw new Error(`이 열을 찾지 못했어요: ${missing.join(', ')}\n성향 문항 12개는 1~4 숫자 응답 열이어야 해요.`);
-    const pick = (r, i) => (i >= 0 ? String(r[i] || '').trim() : '');
-    let added = 0, updated = 0;
-    rows.slice(1).forEach((r) => {
-      const nickname = pick(r, idx.nickname);
-      if (!nickname) return;
-      const answers = qIdx.map((ci) => {
-        const v = pick(r, ci);
-        const m = v.match(/[1-4]/);
-        if (m) return m[0];
-        if (/^A([.\s)]|$)/i.test(v)) return '1';
-        if (/^B([.\s)]|$)/i.test(v)) return '4';
-        return '3';
-      }).join('');
-      const gkv = pick(r, idx.gk), plv = pick(r, idx.play), exv = pick(r, idx.exp);
-      const data = {
-        name: pick(r, idx.name), nickname,
-        number: Number(pick(r, idx.number).replace(/[^0-9]/g, '')) || '',
-        nameEn: pick(r, idx.nameEn), moment: pick(r, idx.moment), answers,
-        gk: gkv.includes('피하') ? 'no' : gkv.includes('좋아') ? 'yes' : 'ok',
-        play: plv.includes('응원') ? 'cheer' : plv.includes('절반') ? 'half' : 'full',
-        exp: exv.includes('이상') ? 2 : exv.includes('1~2') ? 1 : 0,
-      };
-      const ex = state.players.find((p) => p.nickname === nickname);
-      if (ex) { Object.assign(ex, data); updated++; }
-      else {
-        const id = nextId();
-        state.players.push(Object.assign({ id, photo: '' }, data)); added++;
-      }
+    const rows = state.players.concat((state.pending || []).filter((id) => !state.players.some((p) => p.id === id)).map((id) => ({ id })));
+    const out = SKLForm.run({
+      formText: text.trim(),
+      playersCsv: SKLCSV.fromPlayers(rows, SKL.teamsOf(state.meta)),
+      rosterCsv: SKLForm.rosterCsv(state.players),
+      meta: state.meta,
     });
-    return { added, updated };
+    const prev = new Map(state.players.map((p) => [p.id, p]));
+    const parsed = SKLForm.readPlayersCsv(out.playersCsv);
+    state.players = parsed.filter((p) => p.nickname).map((p) => {
+      const full = out.players.find((q) => q.id === p.id) || {};
+      const old = prev.get(p.id) || {};
+      return Object.assign({}, old, p, {
+        name: full.name || old.name || '', exp: full.exp != null ? full.exp : old.exp,
+        photo: old.photo || p.photo || '', emoji: full.emoji || old.emoji || '',
+        team: typeof full.team === 'number' ? full.team : p.team, role: full.role || p.role,
+      });
+    });
+    state.pending = parsed.filter((p) => !p.nickname).map((p) => p.id);
+    state.meta = Object.assign({}, state.meta, { medBold: out.meta.medBold, medSolve: out.meta.medSolve });
+    return out;
   }
 
   /* ---------- ③ QR ---------- */
@@ -391,6 +346,11 @@
   const stamp = () => new Date().toISOString().slice(0, 10).replace(/-/g, '');
   $('#dlPublic').addEventListener('click', () => downloadText(publicCsv(), 'players.csv'));
   $('#dlMeta').addEventListener('click', () => downloadText(publicMeta(), 'meta.json'));
+  $('#dlAnalysis').addEventListener('click', () => {
+    ensureTeams();
+    const an = SKLForm.analyze(state.players.map((p) => Object.assign({}, p)), state.meta, { keepTeams: true, fixedMedian: true });
+    downloadText(JSON.stringify(SKLForm.publicReport(an.report), null, 2) + '\n', 'analysis.json');
+  });
   $('#dlBackup').addEventListener('click', () => downloadText(JSON.stringify(state, null, 2), `skliker-admin-backup-${stamp()}.json`));
   $('#ulBackup').addEventListener('click', () => $('#backupFile').click());
   $('#backupFile').addEventListener('change', async (e) => {

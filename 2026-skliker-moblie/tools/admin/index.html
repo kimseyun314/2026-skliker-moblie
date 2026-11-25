@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th></th><th>닉네임 (실명)</th><th>#</th><th>유형</th><th>과감/해결</th><th>팀</th><th>오늘 포지션</th><th>참여</th><th>QR ID</th><th></th></tr></thead>
+      <thead><tr><th></th><th>닉네임 (실명)</th><th>#</th><th>유형</th><th>도전/주도</th><th>팀</th><th>오늘 포지션</th><th>참여</th><th>QR ID</th><th></th></tr></thead>
       <tbody id="pBody"></tbody>
     </table></div>
     <p class="help">팀 자동 배정은 유형 적합도, 골키퍼 의향, 구력을 반영해 팀마다 골레이로·픽소·아라·피보가 고르게 들어가도록 나눠요. 배정 후 표에서 직접 바꿀 수도 있어요.</p>
@@ -70,7 +70,7 @@
       <div class="dp">
         <h3>방법 A. 파일로 올리기</h3>
         <p>배포용 파일을 받아서 GitHub 저장소의 <code>data/players.csv</code>(선수)와 <code>data/meta.json</code>(행사 설정)에 덮어써요.</p>
-        <button class="primary" id="dlPublic">players.csv 다운로드</button> <button class="ghost" id="dlMeta">meta.json 다운로드</button>
+        <button class="primary" id="dlPublic">players.csv 다운로드</button> <button class="ghost" id="dlMeta">meta.json 다운로드</button> <button class="ghost" id="dlAnalysis">analysis.json 다운로드</button>
       </div>
       <div class="dp">
         <h3>방법 B. GitHub에 바로 저장</h3>
@@ -129,10 +129,10 @@
 <div class="modal" id="importModal"><div class="mbox">
   <div class="mhead"><h2>구글폼 응답 붙여넣기</h2></div>
   <p class="help">구글폼 응답 시트에서 <b>제목 행을 포함해</b> 전체를 복사(Ctrl+C)해서 붙여넣거나, CSV로 내려받은 내용을 붙여넣으세요.
-    질문 제목으로 열을 찾기 때문에 설문지 문항 문구를 그대로 쓰면 돼요. 같은 닉네임이 이미 있으면 그 선수 정보를 업데이트해요 (QR 유지).</p>
+    같은 사람(실명 → 닉네임 순으로 찾아요)은 원래 QR에 그대로 업데이트되고, 새 사람은 미리 만든 빈 QR ID에 순서대로 붙어요. 가져오면 <b>기준선(참가자 중앙값) 재계산 → 유형 분석 → 팀 자동 배정</b>까지 한 번에 해요.</p>
   <textarea id="importText" rows="10" placeholder="타임스탬프	이름	선수카드에 표시할 닉네임	희망 등번호	…"></textarea>
   <div class="ghmsg" id="importMsg"></div>
-  <div class="mfoot"><button class="ghost" id="importCancel">닫기</button><button class="primary" id="importRun">가져오기</button></div>
+  <div class="mfoot"><button class="ghost" id="importCancel">닫기</button><button class="ghost" id="importReport" style="display:none">분석 리포트(.md) 저장</button><button class="primary" id="importRun">가져오기</button></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -141,6 +141,7 @@
 <script src="../../vendor/qrcode.js"></script>
 <script src="../../shared/logic.js"></script>
 <script src="../../shared/csv.js"></script>
+<script src="../../shared/formimport.js"></script>
 <script src="../../shared/store.js"></script>
 <script src="../../shared/qr.js"></script>
 <script src="../../shared/card.js"></script>

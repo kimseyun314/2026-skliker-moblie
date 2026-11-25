@@ -51,7 +51,7 @@
   const scale = Math.min(0.5, (Math.min(window.innerWidth, 480) - 80) / 630);
 
   /* ---------- 1. 유형 공개 ---------- */
-  const best = TYPE_ORDER.reduce((b, k) => (me.aff[k] > me.aff[b] ? k : b), TYPE_ORDER[0]);
+  const best = me.best || SKL.bestOf(me.aff, me.type);
   const stats = TYPE_ORDER.map((k, i) => `<div class="st${k === best ? ' top' : ''}" style="--i:${i};--c:${TYPES[k].color}"><div class="st-k">${['PWR', 'RUN', 'CTL', 'DEF'][i]}<span>${TYPES[k].ability}</span></div><em data-count="${me.aff[k]}">0</em><div class="st-bar"><i style="--w:${me.aff[k]}%"></i></div>${k === best ? '<div class="st-best">BEST</div>' : ''}</div>`).join('');
   const abil = TYPE_ORDER.map((k, i) => `<div class="ab${k === best ? ' top' : ''}" style="--i:${i}"><span>${TYPES[k].ability}</span><div class="tr"><div class="fl" style="--w:${me.aff[k]}%"></div></div><em data-count="${me.aff[k]}">0</em></div>`).join('');
   const p1 = `<section class="panel" data-i="0">
@@ -89,14 +89,14 @@
     : '';
   const p2 = `<section class="panel" data-i="1">
     ${ghost('MAP')}
-    ${ticker(2, ['POSITION MAP', `${players.length} PLAYERS`, '4 TYPES', `과감 ${me.x} · 해결 ${me.y}`])}
+    ${ticker(2, ['POSITION MAP', `${players.length} PLAYERS`, '4 TYPES', `도전 ${me.x} · 주도 ${me.y}`])}
     ${posterHead('02', 'POSITION MAP', '우리 동호회 안에서<br>나는 <u>여기</u>에 있어요')}
     <div class="seg"><button class="on" data-mode="type">TYPE</button><button data-mode="team">TEAM</button></div>
     <div class="mapwrap"><i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i><div class="scan" aria-hidden="true"></div><div id="map">${mapSVG(players, { me, size: 340, meta })}</div>
-      <div class="axis x">과감 →</div><div class="axis y">해결 ↑</div></div>
+      <div class="axis x">도전 →</div><div class="axis y">주도 ↑</div></div>
     <div class="legend" id="legend"></div>
     ${marquee('POSITION MAP', true)}
-    <div class="sheet"><div class="sh1"><span class="tg">${me.type}</span>${esc(me.nickname)}<span class="m">과감 <b>${me.x}</b> · 해결 <b>${me.y}</b> <small>/18</small></span></div>${nearMsg}</div>
+    <div class="sheet"><div class="sh1"><span class="tg">${me.type}</span>${esc(me.nickname)}<span class="m">도전 <b>${me.x}</b> · 주도 <b>${me.y}</b> <small>/18</small></span></div>${nearMsg}</div>
   </section>`;
 
   /* ---------- 3. 우리 팀 ---------- */

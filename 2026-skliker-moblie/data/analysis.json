@@ -1,0 +1,658 @@
+{
+  "generatedAt": "2026-11-25T04:49:29.822Z",
+  "count": 16,
+  "fieldCount": 16,
+  "axes": {
+    "x": "도전(Q1~Q6) ↔ 준비",
+    "y": "주도(Q7~Q12) ↔ 함께"
+  },
+  "median": {
+    "challenge": 9,
+    "lead": 11.5,
+    "source": "participants"
+  },
+  "typeCount": {
+    "PIVO": 3,
+    "ALA": 4,
+    "FIXO": 5,
+    "GOLEIRO": 4
+  },
+  "types": [
+    {
+      "type": "PIVO",
+      "ko": "피보",
+      "nick": "해결사",
+      "axis": "도전 + 주도",
+      "ability": "결정력",
+      "line": "결정적인 순간, 공을 받고 싶어하는 사람",
+      "keywords": [
+        "#해냄의아이콘",
+        "#마감해결사",
+        "#결론메이커"
+      ],
+      "members": [
+        "fdt5ux",
+        "p7qm4h",
+        "3ywtwy"
+      ]
+    },
+    {
+      "type": "ALA",
+      "ko": "아라",
+      "nick": "에너자이저",
+      "axis": "도전 + 함께",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "keywords": [
+        "#일단부딪힘",
+        "#직감결정",
+        "#함께가좋아"
+      ],
+      "members": [
+        "a2qwaa",
+        "jeuapq",
+        "9csqcw",
+        "vat2m5"
+      ]
+    },
+    {
+      "type": "FIXO",
+      "ko": "픽소",
+      "nick": "설계자",
+      "axis": "준비 + 주도",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "keywords": [
+        "#자료조사러",
+        "#정리필요",
+        "#해결책제시"
+      ],
+      "members": [
+        "x5pr8v",
+        "yc8x9y",
+        "2mt67v",
+        "g8ytyp",
+        "nsqbge"
+      ]
+    },
+    {
+      "type": "GOLEIRO",
+      "ko": "골레이로",
+      "nick": "버팀목",
+      "axis": "준비 + 함께",
+      "ability": "수호력",
+      "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
+      "keywords": [
+        "#남을빛내는",
+        "#공감리스너",
+        "#함께가좋아"
+      ],
+      "members": [
+        "mdbg5j",
+        "3trhcb",
+        "dt347d",
+        "6zvngg"
+      ]
+    }
+  ],
+  "teams": [
+    {
+      "index": 0,
+      "name": "산타 FC",
+      "color": "#E63946",
+      "size": 8,
+      "field": 8,
+      "roles": {
+        "GOLEIRO": 1,
+        "FIXO": 2,
+        "ALA": 3,
+        "PIVO": 2,
+        "CHEER": 0
+      },
+      "types": {
+        "PIVO": 2,
+        "ALA": 3,
+        "FIXO": 2,
+        "GOLEIRO": 1
+      },
+      "avgChallenge": 9.4,
+      "avgLead": 11.8,
+      "ability": {
+        "PIVO": 68.6,
+        "ALA": 69.3,
+        "FIXO": 68.9,
+        "GOLEIRO": 66.8
+      },
+      "members": [
+        "a2qwaa",
+        "fdt5ux",
+        "2mt67v",
+        "9csqcw",
+        "vat2m5",
+        "3ywtwy",
+        "3trhcb",
+        "nsqbge"
+      ]
+    },
+    {
+      "index": 1,
+      "name": "루돌프 FC",
+      "color": "#C8853F",
+      "size": 8,
+      "field": 8,
+      "roles": {
+        "GOLEIRO": 1,
+        "FIXO": 2,
+        "ALA": 3,
+        "PIVO": 2,
+        "CHEER": 0
+      },
+      "types": {
+        "PIVO": 1,
+        "ALA": 1,
+        "FIXO": 3,
+        "GOLEIRO": 3
+      },
+      "avgChallenge": 8.4,
+      "avgLead": 10.9,
+      "ability": {
+        "PIVO": 66.8,
+        "ALA": 69.4,
+        "FIXO": 69.1,
+        "GOLEIRO": 70.6
+      },
+      "members": [
+        "x5pr8v",
+        "yc8x9y",
+        "jeuapq",
+        "p7qm4h",
+        "mdbg5j",
+        "g8ytyp",
+        "dt347d",
+        "6zvngg"
+      ]
+    }
+  ],
+  "players": [
+    {
+      "id": "a2qwaa",
+      "nickname": "루나창조주",
+      "number": 3,
+      "x": 11,
+      "y": 11,
+      "type": "ALA",
+      "typeKo": "아라",
+      "typeNick": "에너자이저",
+      "subtype": "질주형 아라",
+      "tags": [
+        "#일단부딪힘",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 72,
+        "ALA": 74,
+        "FIXO": 66,
+        "GOLEIRO": 67
+      },
+      "best": "ALA",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "x5pr8v",
+      "nickname": "와그라노",
+      "number": 18,
+      "x": 7,
+      "y": 12,
+      "type": "FIXO",
+      "typeKo": "픽소",
+      "typeNick": "설계자",
+      "subtype": "설계형 픽소",
+      "tags": [
+        "#관찰후합류",
+        "#해결책제시"
+      ],
+      "aff": {
+        "PIVO": 67,
+        "ALA": 66,
+        "FIXO": 74,
+        "GOLEIRO": 72
+      },
+      "best": "FIXO",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "PIVO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "fdt5ux",
+      "nickname": "공듀",
+      "number": 9,
+      "x": 11,
+      "y": 16,
+      "type": "PIVO",
+      "typeKo": "피보",
+      "typeNick": "해결사",
+      "subtype": "결정형 피보",
+      "tags": [
+        "#일단부딪힘",
+        "#해결책제시"
+      ],
+      "aff": {
+        "PIVO": 80,
+        "ALA": 64,
+        "FIXO": 72,
+        "GOLEIRO": 59
+      },
+      "best": "PIVO",
+      "ability": "결정력",
+      "line": "결정적인 순간, 공을 받고 싶어하는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "PIVO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "yc8x9y",
+      "nickname": "유민상",
+      "number": 19,
+      "x": 2,
+      "y": 12,
+      "type": "FIXO",
+      "typeKo": "픽소",
+      "typeNick": "설계자",
+      "subtype": "설계형 픽소",
+      "tags": [
+        "#관찰후합류",
+        "#결과로증명"
+      ],
+      "aff": {
+        "PIVO": 57,
+        "ALA": 56,
+        "FIXO": 79,
+        "GOLEIRO": 77
+      },
+      "best": "FIXO",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "FIXO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "jeuapq",
+      "nickname": "노두그",
+      "number": 20,
+      "x": 14,
+      "y": 6,
+      "type": "ALA",
+      "typeKo": "아라",
+      "typeNick": "에너자이저",
+      "subtype": "연결형 아라",
+      "tags": [
+        "#먼저인사러",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 65,
+        "ALA": 87,
+        "FIXO": 52,
+        "GOLEIRO": 66
+      },
+      "best": "ALA",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "p7qm4h",
+      "nickname": "쏘이",
+      "number": 12,
+      "x": 11,
+      "y": 16,
+      "type": "PIVO",
+      "typeKo": "피보",
+      "typeNick": "해결사",
+      "subtype": "결정형 피보",
+      "tags": [
+        "#먼저인사러",
+        "#해결책제시"
+      ],
+      "aff": {
+        "PIVO": 80,
+        "ALA": 64,
+        "FIXO": 72,
+        "GOLEIRO": 59
+      },
+      "best": "PIVO",
+      "ability": "결정력",
+      "line": "결정적인 순간, 공을 받고 싶어하는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "PIVO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "mdbg5j",
+      "nickname": "회장님",
+      "number": 11,
+      "x": 9,
+      "y": 8,
+      "type": "GOLEIRO",
+      "typeKo": "골레이로",
+      "typeNick": "버팀목",
+      "subtype": "소통형 골레이로",
+      "tags": [
+        "#관찰후합류",
+        "#공감리스너"
+      ],
+      "aff": {
+        "PIVO": 64,
+        "ALA": 75,
+        "FIXO": 64,
+        "GOLEIRO": 75
+      },
+      "best": "GOLEIRO",
+      "ability": "수호력",
+      "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "GOLEIRO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "2mt67v",
+      "nickname": "선유",
+      "number": 10,
+      "x": 5,
+      "y": 18,
+      "type": "FIXO",
+      "typeKo": "픽소",
+      "typeNick": "설계자",
+      "subtype": "지휘형 픽소",
+      "tags": [
+        "#관찰후합류",
+        "#해결책제시"
+      ],
+      "aff": {
+        "PIVO": 69,
+        "ALA": 52,
+        "FIXO": 87,
+        "GOLEIRO": 62
+      },
+      "best": "FIXO",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "FIXO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "g8ytyp",
+      "nickname": "쟤",
+      "number": 4,
+      "x": 7,
+      "y": 12,
+      "type": "FIXO",
+      "typeKo": "픽소",
+      "typeNick": "설계자",
+      "subtype": "설계형 픽소",
+      "tags": [
+        "#자료조사러",
+        "#결과로증명"
+      ],
+      "aff": {
+        "PIVO": 67,
+        "ALA": 66,
+        "FIXO": 74,
+        "GOLEIRO": 72
+      },
+      "best": "FIXO",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "FIXO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "9csqcw",
+      "nickname": "호호할머니",
+      "number": 92,
+      "x": 17,
+      "y": 4,
+      "type": "ALA",
+      "typeKo": "아라",
+      "typeNick": "에너자이저",
+      "subtype": "질주형 아라",
+      "tags": [
+        "#먼저인사러",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 61,
+        "ALA": 96,
+        "FIXO": 44,
+        "GOLEIRO": 60
+      },
+      "best": "ALA",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "vat2m5",
+      "nickname": "영도리",
+      "number": 27,
+      "x": 9,
+      "y": 11,
+      "type": "ALA",
+      "typeKo": "아라",
+      "typeNick": "에너자이저",
+      "subtype": "연결형 아라",
+      "tags": [
+        "#변화즐김",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 69,
+        "ALA": 71,
+        "FIXO": 69,
+        "GOLEIRO": 71
+      },
+      "best": "ALA",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "3ywtwy",
+      "nickname": "나무늘보",
+      "number": 8,
+      "x": 10,
+      "y": 16,
+      "type": "PIVO",
+      "typeKo": "피보",
+      "typeNick": "해결사",
+      "subtype": "결정형 피보",
+      "tags": [
+        "#먼저인사러",
+        "#해냄의아이콘"
+      ],
+      "aff": {
+        "PIVO": 78,
+        "ALA": 63,
+        "FIXO": 74,
+        "GOLEIRO": 60
+      },
+      "best": "PIVO",
+      "ability": "결정력",
+      "line": "결정적인 순간, 공을 받고 싶어하는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "PIVO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "3trhcb",
+      "nickname": "와플",
+      "number": 5,
+      "x": 7,
+      "y": 5,
+      "type": "GOLEIRO",
+      "typeKo": "골레이로",
+      "typeNick": "버팀목",
+      "subtype": "소통형 골레이로",
+      "tags": [
+        "#계획휴식러",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 55,
+        "ALA": 73,
+        "FIXO": 60,
+        "GOLEIRO": 82
+      },
+      "best": "GOLEIRO",
+      "ability": "수호력",
+      "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "GOLEIRO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "nsqbge",
+      "nickname": "seyonee",
+      "number": 2,
+      "x": 5,
+      "y": 13,
+      "type": "FIXO",
+      "typeKo": "픽소",
+      "typeNick": "설계자",
+      "subtype": "설계형 픽소",
+      "tags": [
+        "#계획휴식러",
+        "#해결책제시"
+      ],
+      "aff": {
+        "PIVO": 65,
+        "ALA": 61,
+        "FIXO": 79,
+        "GOLEIRO": 73
+      },
+      "best": "FIXO",
+      "ability": "설계력",
+      "line": "한 발 뒤에서 판을 읽고 해법을 내는 사람",
+      "team": 0,
+      "teamName": "산타 FC",
+      "role": "FIXO",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "dt347d",
+      "nickname": "쑤기",
+      "number": 35,
+      "x": 8,
+      "y": 11,
+      "type": "GOLEIRO",
+      "typeKo": "골레이로",
+      "typeNick": "버팀목",
+      "subtype": "철벽형 골레이로",
+      "tags": [
+        "#계획휴식러",
+        "#분위기중재"
+      ],
+      "aff": {
+        "PIVO": 67,
+        "ALA": 69,
+        "FIXO": 71,
+        "GOLEIRO": 72
+      },
+      "best": "GOLEIRO",
+      "ability": "수호력",
+      "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "6zvngg",
+      "nickname": "호랑이",
+      "number": 4,
+      "x": 9,
+      "y": 10,
+      "type": "GOLEIRO",
+      "typeKo": "골레이로",
+      "typeNick": "버팀목",
+      "subtype": "소통형 골레이로",
+      "tags": [
+        "#계획휴식러",
+        "#함께가좋아"
+      ],
+      "aff": {
+        "PIVO": 67,
+        "ALA": 72,
+        "FIXO": 67,
+        "GOLEIRO": 72
+      },
+      "best": "GOLEIRO",
+      "ability": "수호력",
+      "line": "맨 뒤에서 모두를 보고 받쳐주는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "ALA",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    }
+  ]
+}

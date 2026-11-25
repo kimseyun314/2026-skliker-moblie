@@ -58,16 +58,16 @@
     const k = (v) => v / 100;
     const r = [p.aff.PIVO, p.aff.ALA, p.aff.FIXO, p.aff.GOLEIRO];
     const pts = [`130,${113 - 89 * k(r[0])}`, `${130 + 70 * k(r[1])},113`, `130,${113 + 89 * k(r[2])}`, `${130 - 70 * k(r[3])},113`].join(' ');
-    return `<svg viewBox="0 0 260 226" class="cb-radar" role="img" aria-label="능력치 돌파력 ${r[0]}, 활동력 ${r[1]}, 조율력 ${r[2]}, 수호력 ${r[3]}">
+    return `<svg viewBox="0 0 260 226" class="cb-radar" role="img" aria-label="능력치 결정력 ${r[0]}, 활동력 ${r[1]}, 설계력 ${r[2]}, 수호력 ${r[3]}">
 <polygon points="130,24 200,113 130,202 60,113" fill="none" stroke="#3A3A3A"/>
 <polygon points="130,46 182.5,113 130,180 77.5,113" fill="none" stroke="#2E2E2E"/>
 <polygon points="130,68.5 165,113 130,157.5 95,113" fill="none" stroke="#2E2E2E"/>
 <line x1="130" y1="24" x2="130" y2="202" stroke="#2E2E2E"/><line x1="60" y1="113" x2="200" y2="113" stroke="#2E2E2E"/>
 <polygon points="${pts}" fill="rgba(228,242,24,.28)" stroke="${LIME}" stroke-width="2.5"/>
-<text x="130" y="15" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">돌파력 ${r[0]}</text>
+<text x="130" y="15" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">결정력 ${r[0]}</text>
 <text x="258" y="105" fill="#fff" font-size="16" font-weight="700" text-anchor="end">활동력</text>
 <text x="258" y="129" fill="#fff" font-size="19" text-anchor="end" font-family="Anton, sans-serif">${r[1]}</text>
-<text x="130" y="223" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">조율력 ${r[2]}</text>
+<text x="130" y="223" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">설계력 ${r[2]}</text>
 <text x="2" y="105" fill="#fff" font-size="16" font-weight="700">수호력</text>
 <text x="2" y="129" fill="#fff" font-size="19" font-family="Anton, sans-serif">${r[3]}</text></svg>`;
   }
@@ -77,11 +77,11 @@
     const { mx, my } = SKL.medians(meta);
     const px = (v) => 4 + (v / 18) * 92, py = (v) => 4 + ((18 - v) / 18) * 92;
     const qx = px(mx), qy = py(my);
-    const quad = { PIVO: `left:${qx}%;right:0;top:0;height:${qy}%`, GOLEIRO: `left:0;width:${qx}%;top:0;height:${qy}%`, ALA: `left:${qx}%;right:0;top:${qy}%;bottom:0`, FIXO: `left:0;width:${qx}%;top:${qy}%;bottom:0` }[p.type];
+    const quad = { PIVO: `left:${qx}%;right:0;top:0;height:${qy}%`, FIXO: `left:0;width:${qx}%;top:0;height:${qy}%`, ALA: `left:${qx}%;right:0;top:${qy}%;bottom:0`, GOLEIRO: `left:0;width:${qx}%;top:${qy}%;bottom:0` }[p.type];
     const lab = (k, pos) => `<div class="mp-l" style="${pos};color:${p.type === k ? LIME : '#6E6E6E'}">${k}</div>`;
     return `<div class="mp"><div class="mp-q" style="${quad}"></div>
 <div class="mp-v" style="left:${qx}%"></div><div class="mp-h" style="top:${qy}%"></div>
-${lab('GOLEIRO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('FIXO', 'bottom:7px;left:9px')}${lab('ALA', 'bottom:7px;right:9px')}
+${lab('FIXO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('GOLEIRO', 'bottom:7px;left:9px')}${lab('ALA', 'bottom:7px;right:9px')}
 <div class="mp-dot" style="left:${px(p.x)}%;top:${py(p.y)}%"></div></div>`;
   }
 
@@ -101,7 +101,7 @@ ${lab('GOLEIRO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('F
       <div class="cb-grid">
         <div class="cb-box"><div class="cb-k">02  ABILITY</div>${radar(p)}</div>
         <div class="cb-box cb-pos"><div class="cb-k">03  POSITION</div>${miniPos(p, meta)}
-          <div class="cb-xy"><div><span>과감 →</span><b>${p.x}</b><small>/18</small></div><div><span>해결 ↑</span><b>${p.y}</b><small>/18</small></div></div></div>
+          <div class="cb-xy"><div><span>도전 →</span><b>${p.x}</b><small>/18</small></div><div><span>주도 ↑</span><b>${p.y}</b><small>/18</small></div></div></div>
       </div>
       <div class="cb-box cb-hl">
         <div><div class="cb-k">04  ${season(meta)} HIGHLIGHT</div><div class="cb-moment">${esc(p.moment || '')}</div></div>
@@ -113,7 +113,7 @@ ${lab('GOLEIRO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('F
   }
 
   /**
-   * 포지션 맵 SVG (모바일용). 가로 = 과감, 세로 = 해결 (0~18), 점선 = 기준선
+   * 포지션 맵 SVG (모바일용). 가로 = 도전, 세로 = 주도 (0~18), 점선 = 기준선
    * opts: { me, size, mode:'type'|'team', teams, meta }
    */
   function mapSVG(players, opts = {}) {
@@ -131,14 +131,14 @@ ${lab('GOLEIRO', 'top:7px;left:9px')}${lab('PIVO', 'top:7px;right:9px')}${lab('F
     const me = opts.me;
     const qx = X(mx), qy = Y(my);
     if (me && opts.mode !== 'team') {
-      const r = { PIVO: [qx, pad, pad + s - qx, qy - pad], GOLEIRO: [pad, pad, qx - pad, qy - pad], ALA: [qx, qy, pad + s - qx, pad + s - qy], FIXO: [pad, qy, qx - pad, pad + s - qy] }[me.type];
+      const r = { PIVO: [qx, pad, pad + s - qx, qy - pad], FIXO: [pad, pad, qx - pad, qy - pad], ALA: [qx, qy, pad + s - qx, pad + s - qy], GOLEIRO: [pad, qy, qx - pad, pad + s - qy] }[me.type];
       g.push(`<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" fill="${LIME}" opacity=".08"/>`);
     }
     g.push(`<line x1="${qx}" y1="${pad}" x2="${qx}" y2="${pad + s}" stroke="#6E6E6E" stroke-dasharray="4 4"/>`);
     g.push(`<line x1="${pad}" y1="${qy}" x2="${pad + s}" y2="${qy}" stroke="#6E6E6E" stroke-dasharray="4 4"/>`);
     const lab = (k, x, y, anchor) => g.push(`<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Oswald, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="${opts.mode === 'team' ? '#6E6E6E' : T()[k].color}" opacity="${me && me.type !== k && opts.mode !== 'team' ? 0.55 : 1}">${k}</text>`);
-    lab('GOLEIRO', pad + 8, pad + 18, 'start'); lab('PIVO', pad + s - 8, pad + 18, 'end');
-    lab('FIXO', pad + 8, pad + s - 8, 'start'); lab('ALA', pad + s - 8, pad + s - 8, 'end');
+    lab('FIXO', pad + 8, pad + 18, 'start'); lab('PIVO', pad + s - 8, pad + 18, 'end');
+    lab('GOLEIRO', pad + 8, pad + s - 8, 'start'); lab('ALA', pad + s - 8, pad + s - 8, 'end');
 
     const seen = {};
     const ordered = players.filter((p) => !me || p.id !== me.id).concat(me ? [players.find((p) => p.id === me.id) || me] : []);
