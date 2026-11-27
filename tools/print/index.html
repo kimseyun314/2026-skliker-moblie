@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>SK라이커 포토카드 인쇄용 (한 장씩)</title>
+<!-- 포토카드 주문용 이미지 1장을 그리는 화면. export.py가 선수·면마다 열어서 PNG로 저장해요.
+     크기: 상품 63×88mm + 사방 재단 여백 2mm = 작업 67×92mm. 화면 1px = 0.1mm (670×920) -->
+<link rel="stylesheet" href="../slides/fonts.css">
+<link rel="stylesheet" href="../../shared/theme.css">
+<link rel="stylesheet" href="../../shared/card.css">
+<style>
+  html, body { margin: 0; background: #0B0B0B; }
+  #c { position: relative; width: 670px; height: 920px; overflow: hidden; background: #0B0B0B; }
+  /* 카드 본체(63×88mm)를 재단 여백 2mm 안쪽에. 바깥 둥근 모서리는 인쇄소가 5mm로 재단해요 */
+  #c .skl-card { position: absolute; left: 20px; top: 20px; border-radius: 0; }
+  /* 인쇄 밀림(1~2mm)·5mm 둥근 재단에 글자가 걸리지 않게 내용만 94%로 줄여 가운데로. 바깥은 같은 검정이라 테두리처럼 보여요 */
+  #c .skl-card > * { transform: scale(.94); transform-origin: 50% 50%; }
+  #guide { position: absolute; left: 20px; top: 20px; width: 630px; height: 880px; border: 2px dashed #FF3B30; border-radius: 50px; box-sizing: border-box; pointer-events: none; display: none; }
+  #guide::after { content: ''; position: absolute; inset: 28px; border: 2px dotted #00C2FF; border-radius: 26px; }
+  body.guide #guide { display: block; }
+</style>
+</head>
+<body>
+<div id="c"></div><div id="guide"></div>
+<script src="../../shared/config.js"></script>
+<script src="../../vendor/qrcode.js"></script>
+<script src="../../shared/logic.js"></script>
+<script src="../../shared/csv.js"></script>
+<script src="../../shared/store.js"></script>
+<script src="../../shared/qr.js"></script>
+<script src="../../shared/card.js"></script>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  if (q.has('guide')) document.body.classList.add('guide');
+  const D = await SKLStore.load();
+  const p = D.players.find((x) => x.id === q.get('id'));
+  const c = document.getElementById('c');
+  if (!p) { c.textContent = 'no player'; window.READY = 'missing'; return; }
+  c.innerHTML = q.get('side') === 'back'
+    ? SKLView.cardBack(p, D.meta, D.teams, D.players, SKLView.qrFile(p.id))
+    : SKLView.cardFront(p, D.meta);
+  await document.fonts.ready;
+  await Promise.all([...c.querySelectorAll('img')].map((i) => i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; })));
+  window.READY = 'ok';
+})();
+</script>
+</body>
+</html>

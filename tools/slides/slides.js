@@ -18,7 +18,8 @@
     const parsed = SKLCSV.toPlayers(csv);
     const med = SKL.medians(meta);
     const names = window.SKL_SLIDES_DATA.names || {};
-    const players = SKL.resolveTeams(parsed.players, meta).map((p) => SKL.enrich(Object.assign({}, p, { photo: '' }, names[p.id] ? { cardName: names[p.id] } : {}), med));
+    const photos = window.SKL_SLIDES_DATA.photos || {};
+    const players = SKL.resolveTeams(parsed.players, meta).map((p) => SKL.enrich(Object.assign({}, p, { photo: photos[p.id] || (/^(data:|https?:)/.test(p.photo || '') ? p.photo : '') }, names[p.id] ? { cardName: names[p.id] } : {}), med));
     const teams = SKL.teamsOf(meta);
     const isCoach = (p) => p.role === 'COACH';
     return { meta, med, teams, players, isCoach, field: players.filter((p) => !isCoach(p)), coaches: players.filter(isCoach), season: meta.season || 2026 };
@@ -54,7 +55,7 @@
         <div class="tt"><div class="k up" style="animation-delay:.4s">SK LIKER FUTSAL CLUB</div>
           <div class="big up" style="animation-delay:.5s">SEASON<br>CLOSING DAY</div>
           <div class="ko up" style="animation-delay:.7s">${esc(meta.event || '시즌 클로징 데이')} · 나의 풋살 포지션 유형</div></div>
-        ${stamp('16', '명의 선수카드', 'SK LIKER ✦ SEASON CLOSING ✦ ' + season + ' ✦ ')}
+        ${stamp(String(players.length), '명의 선수카드', 'SK LIKER ✦ SEASON CLOSING ✦ ' + season + ' ✦ ')}
         ${marquee('SEASON CLOSING DAY')}
         <div class="meta-row">
           <div class="up" style="animation-delay:.9s">PLAYERS<b>${field.length}<em>${coaches.length ? ' +' + coaches.length : ''}</em></b></div>
@@ -91,7 +92,7 @@
         <div class="kicker up"><b>02</b>TODAY'S PLAYERS</div>
         <div class="h1 up" style="animation-delay:.1s">${disp('오늘의 선수들')}<small>카드를 받으면 같이 열어봐요 · 유형은 아직 비밀</small></div>
         <div class="sum up" style="animation-delay:.3s">${field.length}<span class="mute" style="font-size:60px">${coaches.length ? ' +' + coaches.length : ''}</span><small>PLAYERS${coaches.length ? ' + COACH' : ''}</small></div>
-        <div class="grid">${rosterOrder.map((p, i) => `<div class="rtile pop${D.isCoach(p) ? ' coach' : ''}" style="--c:${tc(p)};animation-delay:${.4 + i * .06}s">${avatar(p)}<div class="nm">${esc(p.nickname)}</div><div class="tp">${D.isCoach(p) ? 'COACH' : '???'}</div></div>`).join('')}</div>`,
+        <div class="grid" style="grid-template-columns:repeat(${Math.max(8, Math.ceil(rosterOrder.length / 2))}, 1fr)">${rosterOrder.map((p, i) => `<div class="rtile pop${D.isCoach(p) ? ' coach' : ''}" style="--c:${tc(p)};animation-delay:${.4 + i * .06}s">${avatar(p)}<div class="nm">${esc(p.nickname)}</div><div class="tp">${D.isCoach(p) ? 'COACH' : '???'}</div></div>`).join('')}</div>`,
       enter(el) {
         // 잠깐 뒤에 유형 공개
         later(() => $$('.rtile', el).forEach((t, i) => later(() => {
@@ -239,7 +240,7 @@
     pts.forEach((o, i) => {
       const d = document.createElement('div');
       d.className = 'dot';
-      d.innerHTML = `${esc(o.p.number)}<em>${esc(o.p.nickname)}</em>`;
+      d.innerHTML = o.p.photo ? `<i class="ph" style="background-image:url('${o.p.photo}')"></i><u>${esc(o.p.number)}</u><em>${esc(o.p.nickname)}</em>` : `${esc(o.p.number)}<em>${esc(o.p.nickname)}</em>`;
       const col = i % 8, row = Math.floor(i / 8);
       d.style.left = (150 + col * 75) + 'px'; d.style.top = (360 + row * 100) + 'px';
       plot.appendChild(d); o.el = d;

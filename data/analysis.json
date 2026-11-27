@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-25T05:08:33.444Z",
-  "count": 16,
-  "fieldCount": 15,
+  "generatedAt": "2026-11-26T23:05:58.088Z",
+  "count": 17,
+  "fieldCount": 16,
   "coaches": [
     {
       "id": "6zvngg",
@@ -15,12 +15,12 @@
   },
   "median": {
     "challenge": 9,
-    "lead": 11.5,
+    "lead": 12,
     "source": "participants"
   },
   "typeCount": {
     "PIVO": 3,
-    "ALA": 4,
+    "ALA": 5,
     "FIXO": 5,
     "GOLEIRO": 4
   },
@@ -59,7 +59,8 @@
         "a2qwaa",
         "jeuapq",
         "9csqcw",
-        "vat2m5"
+        "vat2m5",
+        "y8z58q"
       ]
     },
     {
@@ -125,10 +126,10 @@
       "avgChallenge": 8,
       "avgLead": 11,
       "ability": {
-        "PIVO": 66.6,
-        "ALA": 67.6,
-        "FIXO": 69.2,
-        "GOLEIRO": 71.2
+        "PIVO": 66,
+        "ALA": 68.6,
+        "FIXO": 68.4,
+        "GOLEIRO": 72.2
       },
       "members": [
         "a2qwaa",
@@ -142,27 +143,27 @@
       "index": 1,
       "name": "루돌프 FC",
       "color": "#C8853F",
-      "size": 5,
-      "field": 5,
+      "size": 6,
+      "field": 6,
       "roles": {
         "GOLEIRO": 1,
         "FIXO": 2,
-        "ALA": 1,
+        "ALA": 2,
         "PIVO": 1,
         "CHEER": 0
       },
       "types": {
         "PIVO": 1,
-        "ALA": 1,
+        "ALA": 2,
         "FIXO": 2,
         "GOLEIRO": 1
       },
-      "avgChallenge": 9.2,
+      "avgChallenge": 9.8,
       "avgLead": 12,
       "ability": {
-        "PIVO": 69,
-        "ALA": 68.8,
-        "FIXO": 69.8,
+        "PIVO": 69.7,
+        "ALA": 70.8,
+        "FIXO": 68.2,
         "GOLEIRO": 66.8
       },
       "members": [
@@ -170,7 +171,8 @@
         "jeuapq",
         "p7qm4h",
         "mdbg5j",
-        "2mt67v"
+        "2mt67v",
+        "y8z58q"
       ]
     },
     {
@@ -195,10 +197,10 @@
       "avgChallenge": 9.4,
       "avgLead": 11.2,
       "ability": {
-        "PIVO": 67.6,
-        "ALA": 71,
-        "FIXO": 68.4,
-        "GOLEIRO": 67.4
+        "PIVO": 67.2,
+        "ALA": 71.8,
+        "FIXO": 67.6,
+        "GOLEIRO": 68.2
       },
       "members": [
         "g8ytyp",
@@ -225,10 +227,10 @@
         "#함께가좋아"
       ],
       "aff": {
-        "PIVO": 72,
-        "ALA": 74,
-        "FIXO": 66,
-        "GOLEIRO": 67
+        "PIVO": 71,
+        "ALA": 75,
+        "FIXO": 65,
+        "GOLEIRO": 68
       },
       "best": "ALA",
       "ability": "활동력",
@@ -256,9 +258,9 @@
       ],
       "aff": {
         "PIVO": 67,
-        "ALA": 66,
-        "FIXO": 74,
-        "GOLEIRO": 72
+        "ALA": 67,
+        "FIXO": 73,
+        "GOLEIRO": 73
       },
       "best": "FIXO",
       "ability": "설계력",
@@ -286,9 +288,9 @@
       ],
       "aff": {
         "PIVO": 80,
-        "ALA": 64,
+        "ALA": 65,
         "FIXO": 72,
-        "GOLEIRO": 59
+        "GOLEIRO": 60
       },
       "best": "PIVO",
       "ability": "결정력",
@@ -316,9 +318,9 @@
       ],
       "aff": {
         "PIVO": 57,
-        "ALA": 56,
-        "FIXO": 79,
-        "GOLEIRO": 77
+        "ALA": 57,
+        "FIXO": 78,
+        "GOLEIRO": 78
       },
       "best": "FIXO",
       "ability": "설계력",
@@ -345,8 +347,8 @@
         "#함께가좋아"
       ],
       "aff": {
-        "PIVO": 65,
-        "ALA": 87,
+        "PIVO": 63,
+        "ALA": 88,
         "FIXO": 52,
         "GOLEIRO": 66
       },
@@ -376,9 +378,9 @@
       ],
       "aff": {
         "PIVO": 80,
-        "ALA": 64,
+        "ALA": 65,
         "FIXO": 72,
-        "GOLEIRO": 59
+        "GOLEIRO": 60
       },
       "best": "PIVO",
       "ability": "결정력",
@@ -405,10 +407,10 @@
         "#공감리스너"
       ],
       "aff": {
-        "PIVO": 64,
-        "ALA": 75,
-        "FIXO": 64,
-        "GOLEIRO": 75
+        "PIVO": 63,
+        "ALA": 76,
+        "FIXO": 63,
+        "GOLEIRO": 76
       },
       "best": "GOLEIRO",
       "ability": "수호력",
@@ -436,9 +438,9 @@
       ],
       "aff": {
         "PIVO": 69,
-        "ALA": 52,
-        "FIXO": 87,
-        "GOLEIRO": 62
+        "ALA": 53,
+        "FIXO": 86,
+        "GOLEIRO": 63
       },
       "best": "FIXO",
       "ability": "설계력",
@@ -466,9 +468,9 @@
       ],
       "aff": {
         "PIVO": 67,
-        "ALA": 66,
-        "FIXO": 74,
-        "GOLEIRO": 72
+        "ALA": 67,
+        "FIXO": 73,
+        "GOLEIRO": 73
       },
       "best": "FIXO",
       "ability": "설계력",
@@ -495,9 +497,9 @@
         "#함께가좋아"
       ],
       "aff": {
-        "PIVO": 61,
-        "ALA": 96,
-        "FIXO": 44,
+        "PIVO": 60,
+        "ALA": 97,
+        "FIXO": 43,
         "GOLEIRO": 60
       },
       "best": "ALA",
@@ -525,10 +527,10 @@
         "#함께가좋아"
       ],
       "aff": {
-        "PIVO": 69,
-        "ALA": 71,
-        "FIXO": 69,
-        "GOLEIRO": 71
+        "PIVO": 68,
+        "ALA": 72,
+        "FIXO": 68,
+        "GOLEIRO": 72
       },
       "best": "ALA",
       "ability": "활동력",
@@ -556,9 +558,9 @@
       ],
       "aff": {
         "PIVO": 78,
-        "ALA": 63,
+        "ALA": 64,
         "FIXO": 74,
-        "GOLEIRO": 60
+        "GOLEIRO": 61
       },
       "best": "PIVO",
       "ability": "결정력",
@@ -585,10 +587,10 @@
         "#함께가좋아"
       ],
       "aff": {
-        "PIVO": 55,
-        "ALA": 73,
-        "FIXO": 60,
-        "GOLEIRO": 82
+        "PIVO": 54,
+        "ALA": 74,
+        "FIXO": 59,
+        "GOLEIRO": 83
       },
       "best": "GOLEIRO",
       "ability": "수호력",
@@ -615,10 +617,10 @@
         "#해결책제시"
       ],
       "aff": {
-        "PIVO": 65,
+        "PIVO": 64,
         "ALA": 61,
-        "FIXO": 79,
-        "GOLEIRO": 73
+        "FIXO": 78,
+        "GOLEIRO": 74
       },
       "best": "FIXO",
       "ability": "설계력",
@@ -646,9 +648,9 @@
       ],
       "aff": {
         "PIVO": 67,
-        "ALA": 69,
-        "FIXO": 71,
-        "GOLEIRO": 72
+        "ALA": 70,
+        "FIXO": 70,
+        "GOLEIRO": 73
       },
       "best": "GOLEIRO",
       "ability": "수호력",
@@ -676,9 +678,9 @@
       ],
       "aff": {
         "PIVO": 67,
-        "ALA": 72,
+        "ALA": 73,
         "FIXO": 67,
-        "GOLEIRO": 72
+        "GOLEIRO": 73
       },
       "best": "GOLEIRO",
       "ability": "수호력",
@@ -686,6 +688,36 @@
       "team": null,
       "teamName": "",
       "role": "COACH",
+      "play": "full",
+      "gk": "ok",
+      "valid": true
+    },
+    {
+      "id": "y8z58q",
+      "nickname": "짱돌",
+      "number": 45,
+      "x": 13,
+      "y": 12,
+      "type": "ALA",
+      "typeKo": "아라",
+      "typeNick": "에너자이저",
+      "subtype": "질주형 아라",
+      "tags": [
+        "#일단부딪힘",
+        "#공감리스너"
+      ],
+      "aff": {
+        "PIVO": 76,
+        "ALA": 76,
+        "FIXO": 63,
+        "GOLEIRO": 63
+      },
+      "best": "ALA",
+      "ability": "활동력",
+      "line": "먼저 뛰어들고, 같이 웃는 사람",
+      "team": 1,
+      "teamName": "루돌프 FC",
+      "role": "ALA",
       "play": "full",
       "gk": "ok",
       "valid": true

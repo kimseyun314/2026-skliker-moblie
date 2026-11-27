@@ -21,6 +21,21 @@ if (fs.existsSync(rosterPath)) {
   rows.slice(1).forEach((r) => { if (r[ii] && r[ni]) data.names[r[ii].trim()] = r[ni].trim(); });
   console.log('실명', Object.keys(data.names).length + '명 (' + rosterPath + ')');
 } else console.log('private/roster.csv가 없어서 카드에는 닉네임이 들어가요');
+// 사진: players.csv 사진 칸의 파일(photos/…)을 data URI로 넣어서 파일 하나로도 보이게
+data.photos = {};
+{
+  const rows = data.csv.split(/\r?\n/).map((l) => l.split(','));
+  const h = rows[0].map((x) => x.trim());
+  const ii = h.indexOf('ID'), pi = h.indexOf('사진');
+  const mime = { webp: 'image/webp', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' };
+  rows.slice(1).forEach((r) => {
+    const id = (r[ii] || '').trim(), ph = (r[pi] || '').trim();
+    if (!id || !ph || /^(data:|https?:)/.test(ph)) return;
+    const f = path.join(repo, ph);
+    if (fs.existsSync(f)) data.photos[id] = 'data:' + (mime[path.extname(f).slice(1).toLowerCase()] || 'image/png') + ';base64,' + fs.readFileSync(f).toString('base64');
+  });
+  console.log('사진', Object.keys(data.photos).length + '장');
+}
 // 글꼴: fonts.css(make_fonts.py로 만든 내장 글꼴)가 있으면 넣어서 인터넷 없이도 같은 글꼴로 보여요
 const fontsCss = fs.existsSync(path.join(__dirname, 'fonts.css')) ? here('fonts.css') : '';
 const safe = (s) => s.replace(/<\/script/gi, '<\\/script');
